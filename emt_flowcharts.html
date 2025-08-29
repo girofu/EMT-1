@@ -1931,12 +1931,12 @@
         </div>
         
         <div class="tabs">
-            <button class="tab active" onclick="showTab('trauma', this)">🩸 外科（創傷）流程</button>
-            <button class="tab" onclick="showTab('medical', this)">💊 非外科（內科）流程</button>
-            <button class="tab" onclick="showTab('pediatric', this)">👶 小兒救護流程</button>
-            <button class="tab" onclick="showTab('special', this)">🚨 特殊情況處置</button>
-            <button class="tab" onclick="showTab('equipment', this)">🔧 設備操作指南</button>
-            <button class="tab" onclick="showTab('calculator', this)">🧮 劑量計算器</button>
+            <button class="tab active" onclick="showTab('trauma', this, event)">🩸 外科（創傷）流程</button>
+            <button class="tab" onclick="showTab('medical', this, event)">💊 非外科（內科）流程</button>
+            <button class="tab" onclick="showTab('pediatric', this, event)">👶 小兒救護流程</button>
+            <button class="tab" onclick="showTab('special', this, event)">🚨 特殊情況處置</button>
+            <button class="tab" onclick="showTab('equipment', this, event)">🔧 設備操作指南</button>
+            <button class="tab" onclick="showTab('calculator', this, event)">🧮 劑量計算器</button>
         </div>
         
         <!-- 创伤流程 -->
@@ -3344,7 +3344,13 @@
     </div>
 
     <script>
-        function showTab(tabName, clickedTab) {
+        function showTab(tabName, clickedTab, event) {
+            // Prevent default behavior and stop event propagation
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+
             // Hide all tab contents
             const contents = document.querySelectorAll('.tab-content');
             contents.forEach(content => content.classList.remove('active'));
@@ -3354,12 +3360,21 @@
             tabs.forEach(tab => tab.classList.remove('active'));
 
             // Show selected tab content
-            document.getElementById(tabName).classList.add('active');
+            const targetContent = document.getElementById(tabName);
+            if (targetContent) {
+                targetContent.classList.add('active');
+            }
 
             // Add active status to clicked tab
             if (clickedTab) {
                 clickedTab.classList.add('active');
             }
+
+            // Prevent page scroll by maintaining current scroll position
+            const currentScrollY = window.scrollY;
+            setTimeout(() => {
+                window.scrollTo(0, currentScrollY);
+            }, 0);
         }
         
         // Add search functionality
@@ -3460,14 +3475,18 @@
             document.body.appendChild(quickNav);
         }
         
-        function showTabByName(tabName) {
+                function showTabByName(tabName) {
             const contents = document.querySelectorAll('.tab-content');
             contents.forEach(content => content.classList.remove('active'));
 
             const tabs = document.querySelectorAll('.tab');
             tabs.forEach(tab => tab.classList.remove('active'));
 
-            document.getElementById(tabName).classList.add('active');
+            // Show selected tab content with null check
+            const targetContent = document.getElementById(tabName);
+            if (targetContent) {
+                targetContent.classList.add('active');
+            }
 
             // Find corresponding tab button and add active status
             const tabButtons = document.querySelectorAll('.tab');
@@ -3476,6 +3495,12 @@
             if (index !== -1 && tabButtons[index]) {
                 tabButtons[index].classList.add('active');
             }
+
+            // Prevent page scroll by maintaining current scroll position
+            const currentScrollY = window.scrollY;
+            setTimeout(() => {
+                window.scrollTo(0, currentScrollY);
+            }, 0);
         }
         
         // Add print function
