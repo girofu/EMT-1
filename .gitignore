@@ -91,6 +91,9 @@ temp/
 # Railway files
 .railway/
 
+# Reference materials (local only, not for deployment)
+reference/
+
 # Editor directories and files
 .vscode/
 .idea/
