@@ -1,0 +1,3522 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMT-1 救护流程图</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 3px solid #e9ecef;
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+            background: linear-gradient(45deg, #74b9ff, #0984e3);
+            color: white;
+            border: none;
+        }
+        
+        .tab:hover {
+            background: linear-gradient(45deg, #0984e3, #74b9ff);
+            transform: translateY(-2px);
+        }
+        
+        .tab.active {
+            background: linear-gradient(45deg, #00b894, #00cec9);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 30px;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .flowchart {
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        /* 改進的流程步驟樣式 */
+        .step {
+            background: linear-gradient(145deg, #ffffff, #f8fafc);
+            border: 2px solid #e2e8f0;
+            border-left: 6px solid #8b5cf6;
+            border-radius: 12px;
+            padding: 24px;
+            margin: 20px 0;
+            position: relative;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.06);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .step::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #8b5cf6, #06b6d4, #10b981);
+        }
+        
+        .step:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(139, 92, 246, 0.4);
+        }
+        
+        .step-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #5b21b6;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .step-number {
+            background: linear-gradient(135deg, #8b5cf6, #06b6d4);
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 20px;
+            font-size: 1.2em;
+            box-shadow: 0 4px 8px rgba(139, 92, 246, 0.3);
+            border: 3px solid white;
+            position: relative;
+        }
+        
+        .step-number::after {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #8b5cf6, #06b6d4);
+            z-index: -1;
+        }
+        
+        .assessment {
+            background: #fef7cd;
+            border-left: 4px solid #f59e0b;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+        }
+        
+        .normal {
+            background: #d1fae5;
+            border-left: 4px solid #059669;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+        }
+        
+        .abnormal {
+            background: #fee2e2;
+            border-left: 4px solid #dc2626;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+        }
+        
+        .critical {
+            background: #fef2f2;
+            border: 2px solid #991b1b;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(220, 38, 38, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
+        }
+        
+        .treatment {
+            background: #ede9fe;
+            border-left: 4px solid #8b5cf6;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+        }
+        
+        .condition {
+            background: #ecfdf5;
+            border-left: 4px solid #10b981;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 5px;
+            font-size: 0.9em;
+        }
+        
+        .arrow {
+            text-align: center;
+            font-size: 2.5em;
+            color: #8b5cf6;
+            margin: 20px 0;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .arrow::before {
+            content: '';
+            position: absolute;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #8b5cf6, transparent);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+        }
+        
+        .arrow span {
+            background: white;
+            padding: 0 15px;
+            border-radius: 20px;
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.2);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            font-weight: bold;
+        }
+        
+        .warning {
+            background: #fef3c7;
+            border: 2px solid #f59e0b;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+        
+        .legend {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-radius: 8px;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+        
+        .branch-container {
+            margin-left: 30px;
+            border-left: 3px dashed #8b5cf6;
+            padding-left: 20px;
+        }
+        
+        .sub-step {
+            background: rgba(139, 92, 246, 0.1);
+            border: 2px solid #c084fc;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        
+        .emergency {
+            background: linear-gradient(45deg, #ff4757, #ff3838);
+            color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            text-align: center;
+            font-weight: bold;
+            box-shadow: 0 6px 12px rgba(255, 71, 87, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚑 EMT-1 救護流程圖</h1>
+            <p>基於內政部消防署114年緊急醫療救護單項技術操作原則</p>
+        </div>
+        
+        <!-- 设备操作指南 -->
+        <div id="equipment" class="tab-content">
+            <div class="flowchart">
+                <div class="warning">
+                    🔧 設備操作重點：標準化操作流程 + 安全檢查 + 故障排除
+                </div>
+                
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">1</div>
+                        袋瓣罩甦醒球操作
+                    </div>
+                    
+                    <div class="branch-container">
+                        <div class="sub-step">
+                            <strong>🫁 組裝與檢查：</strong>
+                            <div class="treatment">
+                                <strong>組裝順序：</strong>
+                                <ol>
+                                    <li>檢查甦醒球完整性（無破損）</li>
+                                    <li>連接單向閥片</li>
+                                    <li>裝上面罩（選擇適當尺寸）</li>
+                                    <li>連接氧氣導管</li>
+                                    <li>連接氧氣儲存袋</li>
+                                    <li>開啟氧氣15L/min</li>
+                                </ol>
+                            </div>
+                            
+                            <div class="assessment">
+                                <strong>功能測試：</strong>
+                                <ul>
+                                    <li>遮住面罩出氣口，擠壓甦醒球應有阻力</li>
+                                    <li>放開後甦醒球應自動膨脹</li>
+                                    <li>檢查各連接處無漏氣</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="sub-step">
+                            <strong>🎭 面罩密合技術：</strong>
+                            <div class="treatment">
+                                <strong>EC手法：</strong>
+                                <ul>
+                                    <li><strong>E:</strong> 拇指和食指形成"E"字形扣住面罩</li>
+                                    <li><strong>C:</strong> 中指、無名指、小指形成"C"字形抬起下顎</li>
+                                    <li>面罩尖端朝向病人前額</li>
+                                    <li>確保鼻梁和下巴完全密合</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="critical">
+                                <strong>⚠️ 常見錯誤：</strong>
+                                <ul>
+                                    <li>用力壓迫面罩造成漏氣</li>
+                                    <li>忽略鼻翼密合</li>
+                                    <li>下顎支撐不足</li>
+                                    <li>面罩尺寸選擇錯誤</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="arrow"><span>↓</span></div>
+                
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">2</div>
+                        AED自動體外去顫器
+                    </div>
+                    
+                    <div class="branch-container">
+                        <div class="sub-step">
+                            <strong>⚡ 操作流程：</strong>
+                            <div class="treatment">
+                                <strong>標準步驟：</strong>
+                                <ol>
+                                    <li>開機：按下電源按鈕</li>
+                                    <li>貼片：撕開電擊貼片，按圖示位置貼上</li>
+                                    <li>插線：將貼片線插入AED</li>
+                                    <li>分析：按分析鈕或自動分析</li>
+                                    <li>淨空：確認無人接觸病人</li>
+                                    <li>電擊：按閃爍的電擊鈕</li>
+                                    <li>CPR：立即重新開始2分鐘CPR</li>
+                                </ol>
+                            </div>
+                            
+                            <div class="assessment">
+                                <strong>貼片位置：</strong>
+                                <ul>
+                                    <li><strong>右上：</strong>右鎖骨下緣，胸骨右緣</li>
+                                    <li><strong>左下：</strong>左腋中線第5-6肋間</li>
+                                    <li>避開：起搏器、貼布、多毛部位</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="sub-step">
+                            <strong>🔧 故障排除：</strong>
+                            <div class="abnormal">
+                                <strong>常見問題處理：</strong>
+                                <table style="width:100%; border-collapse: collapse; margin-top:10px;">
+                                    <tr style="background:#f8f9fa; font-weight:bold;">
+                                        <td style="border:1px solid #ddd; padding:8px;">問題</td>
+                                        <td style="border:1px solid #ddd; padding:8px;">可能原因</td>
+                                        <td style="border:1px solid #ddd; padding:8px;">解決方法</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border:1px solid #ddd; padding:8px;">"檢查電極"</td>
+                                        <td style="border:1px solid #ddd; padding:8px;">貼片鬆脫或乾燥</td>
+                                        <td style="border:1px solid #ddd; padding:8px;">重新貼上新貼片</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border:1px solid #ddd; padding:8px;">"停止移動"</td>
+                                        <td style="border:1px solid #ddd; padding:8px;">CPR干擾分析</td>
+                                        <td style="border:1px solid #ddd; padding:8px;">暫停按壓等待分析</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border:1px solid #ddd; padding:8px;">"無電擊建議"</td>
+                                        <td style="border:1px solid #ddd; padding:8px;">非電擊性節律</td>
+                                        <td style="border:1px solid #ddd; padding:8px;">繼續CPR 2分鐘</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="arrow"><span>↓</span></div>
+                
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">3</div>
+                        抽吸設備操作
+                    </div>
+                    
+                    <div class="branch-container">
+                        <div class="sub-step">
+                            <strong>🌪️ 電動抽吸器：</strong>
+                            <div class="treatment">
+                                <strong>設置流程：</strong>
+                                <ol>
+                                    <li>檢查設備電源和真空度</li>
+                                    <li>連接抽吸導管和收集瓶</li>
+                                    <li>調整抽吸壓力（成人-80 to -120mmHg）</li>
+                                    <li>測試抽吸功能</li>
+                                    <li>準備無菌抽吸導管</li>
+                                </ol>
+                            </div>
+                            
+                            <div class="assessment">
+                                <strong>抽吸壓力設定：</strong>
+                                <ul>
+                                    <li><strong>成人：</strong>-80 to -120 mmHg</li>
+                                    <li><strong>兒童：</strong>-60 to -100 mmHg</li>
+                                    <li><strong>嬰兒：</strong>-60 to -80 mmHg</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="sub-step">
+                            <strong>🧤 無菌技術：</strong>
+                            <div class="treatment">
+                                <strong>操作要點：</strong>
+                                <ul>
+                                    <li>戴無菌手套（單手戴套法）</li>
+                                    <li>以無菌手握持導管</li>
+                                    <li>非無菌手操作抽吸控制</li>
+                                    <li>抽吸時間：成人<15秒，兒童<10秒</li>
+                                    <li>間歇性抽吸，避免持續負壓</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="arrow"><span>↓</span></div>
+                
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">4</div>
+                        血壓測量技術
+                    </div>
+                    
+                    <div class="branch-container">
+                        <div class="sub-step">
+                            <strong>🩺 手動血壓計：</strong>
+                            <div class="treatment">
+                                <strong>測量步驟：</strong>
+                                <ol>
+                                    <li>選擇適當袖帶尺寸（袖帶寬度=上臂圓周2/3）</li>
+                                    <li>病人坐姿或仰臥，手臂與心臟同高</li>
+                                    <li>袖帶下緣距肘窩2-3公分</li>
+                                    <li>觸診橈動脈，快速充氣至脈搏消失+20mmHg</li>
+                                    <li>聽診肱動脈，以2mmHg/秒速度放氣</li>
+                                    <li>記錄柯氏音第一音（收縮壓）和消失音（舒張壓）</li>
+                                </ol>
+                            </div>
+                            
+                            <div class="critical">
+                                <strong>⚠️ 測量誤差因子：</strong>
+                                <ul>
+                                    <li>袖帶過大：測值偏低</li>
+                                    <li>袖帶過小：測值偏高</li>
+                                    <li>充氣過快：病人不適</li>
+                                    <li>放氣過快：測值不準</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="sub-step">
+                            <strong>🔢 自動血壓計：</strong>
+                            <div class="treatment">
+                                <strong>使用注意事項：</strong>
+                                <ul>
+                                    <li>定期校準（每6個月）</li>
+                                    <li>心律不整時可能不準確</li>
+                                    <li>震動環境中避免使用</li>
+                                    <li>異常值需手動確認</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="arrow"><span>↓</span></div>
+                
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">5</div>
+                        血糖測定技術
+                    </div>
+                    
+                    <div class="branch-container">
+                        <div class="sub-step">
+                            <strong>🩸 採血步驟：</strong>
+                            <div class="treatment">
+                                <strong>標準操作：</strong>
+                                <ol>
+                                    <li>選擇採血部位（手指側緣）</li>
+                                    <li>酒精消毒並待乾燥</li>
+                                    <li>裝上採血針，調整深度</li>
+                                    <li>快速穿刺，第一滴血擦掉</li>
+                                    <li>第二滴血滴上試紙</li>
+                                    <li>試紙完全覆蓋血樣</li>
+                                    <li>按壓止血，丟棄針具</li>
+                                </ol>
+                            </div>
+                            
+                            <div class="assessment">
+                                <strong>品質控制：</strong>
+                                <ul>
+                                    <li>檢查試紙有效期限</li>
+                                    <li>校正血糖機（Code match）</li>
+                                    <li>避免擠壓手指</li>
+                                    <li>血量要充足</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="sub-step">
+                            <strong>📊 結果判讀：</strong>
+                            <div class="treatment">
+                                <strong>參考值範圍：</strong>
+                                <table style="width:100%; border-collapse: collapse; margin-top:10px;">
+                                    <tr style="background:#f8f9fa; font-weight:bold;">
+                                        <td style="border:1px solid #ddd; padding:8px;">血糖值</td>
+                                        <td style="border:1px solid #ddd; padding:8px;">臨床意義</td>
+                                        <td style="border:1px solid #ddd; padding:8px;">處置</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border:1px solid #ddd; padding:8px;"><60 mg/dL</td>
+                                        <td style="border:1px solid #ddd; padding:8px; background:#fee2e2;">低血糖</td>
+                                        <td style="border:1px solid #ddd; padding:8px;">葡萄糖或糖水</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border:1px solid #ddd; padding:8px;">80-120 mg/dL</td>
+                                        <td style="border:1px solid #ddd; padding:8px; background:#d1fae5;">正常</td>
+                                        <td style="border:1px solid #ddd; padding:8px;">持續監測</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border:1px solid #ddd; padding:8px;">>400 mg/dL或"Hi"</td>
+                                        <td style="border:1px solid #ddd; padding:8px; background:#fee2e2;">高血糖危急</td>
+                                        <td style="border:1px solid #ddd; padding:8px;">大量輸液稀釋</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="arrow"><span>↓</span></div>
+                
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">6</div>
+                        頸椎固定技術
+                    </div>
+                    
+                    <div class="branch-container">
+                        <div class="sub-step">
+                            <strong>🦴 頸圈選擇：</strong>
+                            <div class="treatment">
+                                <strong>測量方法：</strong>
+                                <ol>
+                                    <li>測量下顎至肩膀垂直距離</li>
+                                    <li>選擇或調整適當大小頸圈</li>
+                                    <li>確認頸圈不會影響呼吸</li>
+                                    <li>檢查是否過緊或過鬆</li>
+                                </ol>
+                            </div>
+                            
+                            <div class="critical">
+                                <strong>⚠️ 頸圈禁忌症：</strong>
+                                <ul>
+                                    <li>頸部穿刺傷、開放傷</li>
+                                    <li>氣管造口</li>
+                                    <li>嚴重頸部腫脹</li>
+                                    <li>頸圈會加重呼吸困難</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="sub-step">
+                            <strong>🏥 長背板固定：</strong>
+                            <div class="treatment">
+                                <strong>固定順序：</strong>
+                                <ol>
+                                    <li>頭部固定器安裝</li>
+                                    <li>胸部固定帶</li>
+                                    <li>骨盆固定帶</li>
+                                    <li>大腿固定帶</li>
+                                    <li>腳踝固定帶</li>
+                                    <li>檢查各部位血液循環</li>
+                                </ol>
+                            </div>
+                            
+                            <div class="assessment">
+                                <strong>品質檢查：</strong>
+                                <ul>
+                                    <li>固定帶不可過緊影響呼吸</li>
+                                    <li>檢查遠端脈搏</li>
+                                    <li>確認病人舒適度</li>
+                                    <li>預防壓瘡形成</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">7</div>
+                        設備維護與檢查
+                    </div>
+                    
+                    <div class="treatment">
+                        <strong>每班檢查項目：</strong>
+                        <ul>
+                            <li><strong>氧氣系統：</strong>壓力表讀數、管路完整性、面罩清潔</li>
+                            <li><strong>抽吸設備：</strong>真空度測試、收集瓶清空、導管備量</li>
+                            <li><strong>AED：</strong>電池電量、貼片有效期、自我測試</li>
+                            <li><strong>監測設備：</strong>血壓計校準、血糖機功能、體溫計準確性</li>
+                            <li><strong>固定器材：</strong>頸圈完整性、背板清潔、固定帶功能</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="critical">
+                        <strong>🔧 故障報告流程：</strong>
+                        <ol>
+                            <li>立即停止使用故障設備</li>
+                            <li>標示"故障勿用"</li>
+                            <li>填寫設備故障單</li>
+                            <li>通知維修單位</li>
+                            <li>尋找備用設備</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 剂量计算器 -->
+        <div id="calculator" class="tab-content">
+            <div class="flowchart">
+                <div class="warning">
+                    🧮 劑量計算重點：體重計算 + 藥物換算 + 安全確認
+                </div>
+                
+                <!-- 体重计算器 -->
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">1</div>
+                        兒童體重快速估算
+                    </div>
+                    
+                    <div class="calculator-container" style="background: #f0f9ff; border-radius: 15px; padding: 20px; margin: 20px 0;">
+                        <h4 style="color: #0369a1; margin-bottom: 15px;">📏 體重計算器</h4>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px;">
+                            <div style="background: white; border-radius: 10px; padding: 15px;">
+                                <label for="ageInput" style="display: block; margin-bottom: 10px; font-weight: bold;">年齡（歲）:</label>
+                                <input type="number" id="ageInput" min="1" max="10" 
+                                       style="width: 100%; padding: 10px; border: 2px solid #0ea5e9; border-radius: 5px; font-size: 16px;">
+                                
+                                <button onclick="calculateWeight()" 
+                                        style="width: 100%; margin-top: 15px; padding: 12px; background: linear-gradient(45deg, #0ea5e9, #06b6d4); color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">
+                                    計算體重
+                                </button>
+                                
+                                <div id="weightResult" style="margin-top: 15px; padding: 10px; background: #ecfccb; border-radius: 5px; font-weight: bold; display: none;"></div>
+                            </div>
+                            
+                            <div style="background: white; border-radius: 10px; padding: 15px;">
+                                <h5 style="color: #0369a1;">📋 體重計算公式</h5>
+                                <ul>
+                                    <li><strong>1-10歲：</strong>體重(kg) = (年齡 × 2) + 8</li>
+                                    <li><strong>1歲以下：</strong>出生體重 + (月齡 × 0.7)</li>
+                                    <li><strong>青少年：</strong>使用實際體重</li>
+                                </ul>
+                                
+                                <div style="margin-top: 15px; padding: 10px; background: #fef3c7; border-radius: 5px;">
+                                    <strong>⚠️ 注意：</strong>肥胖或營養不良兒童應使用實際體重
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 药物剂量计算 -->
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">2</div>
+                        常用藥物劑量計算
+                    </div>
+                    
+                    <div class="calculator-container" style="background: #f0fdf4; border-radius: 15px; padding: 20px; margin: 20px 0;">
+                        <h4 style="color: #166534; margin-bottom: 15px;">💊 藥物劑量計算器</h4>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px;">
+                            <div style="background: white; border-radius: 10px; padding: 15px;">
+                                <label style="display: block; margin-bottom: 10px; font-weight: bold;">選擇藥物:</label>
+                                <select id="drugSelect" style="width: 100%; padding: 10px; border: 2px solid #10b981; border-radius: 5px; font-size: 16px;">
+                                    <option value="">請選擇藥物</option>
+                                    <option value="epi">腎上腺素(過敏)</option>
+                                    <option value="glucose">葡萄糖(低血糖)</option>
+                                    <option value="aspirin">阿斯匹靈</option>
+                                    <option value="oxygen">氧氣流量</option>
+                                </select>
+                                
+                                <label style="display: block; margin: 15px 0 10px 0; font-weight: bold;">體重(kg):</label>
+                                <input type="number" id="weightInput" min="1" max="100" step="0.1"
+                                       style="width: 100%; padding: 10px; border: 2px solid #10b981; border-radius: 5px; font-size: 16px;">
+                                
+                                <button onclick="calculateDose()" 
+                                        style="width: 100%; margin-top: 15px; padding: 12px; background: linear-gradient(45deg, #10b981, #059669); color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">
+                                    計算劑量
+                                </button>
+                                
+                                <div id="doseResult" style="margin-top: 15px; padding: 10px; background: #dcfce7; border-radius: 5px; display: none;"></div>
+                            </div>
+                            
+                            <div style="background: white; border-radius: 10px; padding: 15px;">
+                                <h5 style="color: #166534;">📊 標準劑量參考</h5>
+                                
+                                <div style="margin-bottom: 15px;">
+                                    <strong>🌟 腎上腺素自動注射筆：</strong>
+                                    <ul>
+                                        <li>成人(>30kg)：0.3mg</li>
+                                        <li>兒童(15-30kg)：0.15mg</li>
+                                        <li>可於5-15分鐘後重複</li>
+                                    </ul>
+                                </div>
+                                
+                                <div style="margin-bottom: 15px;">
+                                    <strong>🍯 葡萄糖：</strong>
+                                    <ul>
+                                        <li>成人：25-50g IV（50ml D50W）</li>
+                                        <li>兒童：0.5-1g/kg IV</li>
+                                        <li>新生兒：2ml/kg D10W</li>
+                                    </ul>
+                                </div>
+                                
+                                <div>
+                                    <strong>💊 阿斯匹靈：</strong>
+                                    <ul>
+                                        <li>成人：160-325mg咀嚼</li>
+                                        <li>兒童：禁用（瑞氏症候群風險）</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 输液计算 -->
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">3</div>
+                        輸液速率計算
+                    </div>
+                    
+                    <div class="calculator-container" style="background: #fefce8; border-radius: 15px; padding: 20px; margin: 20px 0;">
+                        <h4 style="color: #a16207; margin-bottom: 15px;">💧 輸液計算器</h4>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px;">
+                            <div style="background: white; border-radius: 10px; padding: 15px;">
+                                <label style="display: block; margin-bottom: 10px; font-weight: bold;">輸液總量(ml):</label>
+                                <input type="number" id="volumeInput" min="1" max="2000"
+                                       style="width: 100%; padding: 10px; border: 2px solid #eab308; border-radius: 5px; font-size: 16px;">
+                                
+                                <label style="display: block; margin: 15px 0 10px 0; font-weight: bold;">輸注時間(小時):</label>
+                                <input type="number" id="timeInput" min="0.5" max="24" step="0.5"
+                                       style="width: 100%; padding: 10px; border: 2px solid #eab308; border-radius: 5px; font-size: 16px;">
+                                
+                                <label style="display: block; margin: 15px 0 10px 0; font-weight: bold;">點滴係數:</label>
+                                <select id="dropFactor" style="width: 100%; padding: 10px; border: 2px solid #eab308; border-radius: 5px; font-size: 16px;">
+                                    <option value="10">微滴管 (60滴/ml)</option>
+                                    <option value="15">一般滴管 (15滴/ml)</option>
+                                    <option value="20">大滴管 (10滴/ml)</option>
+                                </select>
+                                
+                                <button onclick="calculateIV()" 
+                                        style="width: 100%; margin-top: 15px; padding: 12px; background: linear-gradient(45deg, #eab308, #ca8a04); color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">
+                                    計算滴速
+                                </button>
+                                
+                                <div id="ivResult" style="margin-top: 15px; padding: 10px; background: #fef3c7; border-radius: 5px; display: none;"></div>
+                            </div>
+                            
+                            <div style="background: white; border-radius: 10px; padding: 15px;">
+                                <h5 style="color: #a16207;">📘 輸液參考指南</h5>
+                                
+                                <div style="margin-bottom: 15px;">
+                                    <strong>⚡ 休克復甦：</strong>
+                                    <ul>
+                                        <li>成人：1-2L 生理食鹽水快速輸注</li>
+                                        <li>兒童：20ml/kg 快速輸注</li>
+                                        <li>可重複，總量不超過60ml/kg</li>
+                                    </ul>
+                                </div>
+                                
+                                <div style="margin-bottom: 15px;">
+                                    <strong>💧 維持輸液：</strong>
+                                    <ul>
+                                        <li>成人：30-40ml/kg/day</li>
+                                        <li>兒童：100ml/kg/day (前10kg)</li>
+                                        <li>+ 50ml/kg/day (次10kg)</li>
+                                        <li>+ 20ml/kg/day (>20kg部分)</li>
+                                    </ul>
+                                </div>
+                                
+                                <div style="background: #fef3c7; padding: 10px; border-radius: 5px;">
+                                    <strong>⚠️ 注意：</strong>心衰、腎衰患者需謹慎給液
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- CPR质量指标 -->
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">4</div>
+                        CPR品質指標計算
+                    </div>
+                    
+                    <div class="calculator-container" style="background: #fdf2f8; border-radius: 15px; padding: 20px; margin: 20px 0;">
+                        <h4 style="color: #be185d; margin-bottom: 15px;">❤️ CPR品質監測</h4>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px;">
+                            <div style="background: white; border-radius: 10px; padding: 15px;">
+                                <h5 style="color: #be185d;">📊 按壓深度參考</h5>
+                                <table style="width:100%; border-collapse: collapse; margin-top:10px;">
+                                    <tr style="background:#f8f9fa; font-weight:bold;">
+                                        <td style="border:1px solid #ddd; padding:8px;">年齡組</td>
+                                        <td style="border:1px solid #ddd; padding:8px;">按壓深度</td>
+                                        <td style="border:1px solid #ddd; padding:8px;">按壓頻率</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border:1px solid #ddd; padding:8px;">成人</td>
+                                        <td style="border:1px solid #ddd; padding:8px;">5-6 cm</td>
+                                        <td style="border:1px solid #ddd; padding:8px;">100-120/分</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border:1px solid #ddd; padding:8px;">兒童</td>
+                                        <td style="border:1px solid #ddd; padding:8px;">5 cm或胸徑1/3</td>
+                                        <td style="border:1px solid #ddd; padding:8px;">100-120/分</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border:1px solid #ddd; padding:8px;">嬰兒</td>
+                                        <td style="border:1px solid #ddd; padding:8px;">4 cm或胸徑1/3</td>
+                                        <td style="border:1px solid #ddd; padding:8px;">100-120/分</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border:1px solid #ddd; padding:8px;">新生兒</td>
+                                        <td style="border:1px solid #ddd; padding:8px;">胸徑1/3</td>
+                                        <td style="border:1px solid #ddd; padding:8px;">120/分</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            
+                            <div style="background: white; border-radius: 10px; padding: 15px;">
+                                <h5 style="color: #be185d;">⏱️ CPR時間計算器</h5>
+                                
+                                <label style="display: block; margin-bottom: 10px; font-weight: bold;">開始CPR時間:</label>
+                                <input type="time" id="cprStartTime" 
+                                       style="width: 100%; padding: 10px; border: 2px solid #ec4899; border-radius: 5px; font-size: 16px;">
+                                
+                                <label style="display: block; margin: 15px 0 10px 0; font-weight: bold;">當前時間:</label>
+                                <input type="time" id="cprCurrentTime" 
+                                       style="width: 100%; padding: 10px; border: 2px solid #ec4899; border-radius: 5px; font-size: 16px;">
+                                
+                                <button onclick="calculateCPRTime()" 
+                                        style="width: 100%; margin-top: 15px; padding: 12px; background: linear-gradient(45deg, #ec4899, #be185d); color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">
+                                    計算CPR持續時間
+                                </button>
+                                
+                                <div id="cprTimeResult" style="margin-top: 15px; padding: 10px; background: #fce7f3; border-radius: 5px; display: none;"></div>
+                                
+                                <div style="margin-top: 15px; background: #fef2f2; padding: 10px; border-radius: 5px;">
+                                    <strong>📋 CPR品質要求：</strong>
+                                    <ul>
+                                        <li>中斷時間 <10秒</li>
+                                        <li>按壓分數 >80%</li>
+                                        <li>完全回彈</li>
+                                        <li>適當通氣量</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 休克指数计算器 -->
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">5</div>
+                        休克指數與生命徵象評估器
+                    </div>
+                    
+                    <div class="calculator-container" style="background: #fef2f2; border-radius: 15px; padding: 20px; margin: 20px 0;">
+                        <h4 style="color: #be185d; margin-bottom: 15px;">💔 休克指數計算器</h4>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px;">
+                            <div style="background: white; border-radius: 10px; padding: 15px;">
+                                <label style="display: block; margin-bottom: 10px; font-weight: bold;">心率（次/分）:</label>
+                                <input type="number" id="heartRateInput" min="30" max="250"
+                                       style="width: 100%; padding: 10px; border: 2px solid #ec4899; border-radius: 5px; font-size: 16px;">
+                                
+                                <label style="display: block; margin: 15px 0 10px 0; font-weight: bold;">收縮壓（mmHg）:</label>
+                                <input type="number" id="systolicInput" min="40" max="300"
+                                       style="width: 100%; padding: 10px; border: 2px solid #ec4899; border-radius: 5px; font-size: 16px;">
+                                
+                                <button onclick="calculateShockIndex()" 
+                                        style="width: 100%; margin-top: 15px; padding: 12px; background: linear-gradient(45deg, #ec4899, #be185d); color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">
+                                    計算休克指數
+                                </button>
+                                
+                                <div id="shockResult" style="margin-top: 15px; padding: 10px; background: #fce7f3; border-radius: 5px; display: none;"></div>
+                            </div>
+                            
+                            <div style="background: white; border-radius: 10px; padding: 15px;">
+                                <h5 style="color: #be185d;">📊 休克指數判讀</h5>
+                                <table style="width:100%; border-collapse: collapse; margin-top:10px;">
+                                    <tr style="background:#f8f9fa; font-weight:bold;">
+                                        <td style="border:1px solid #ddd; padding:8px;">休克指數</td>
+                                        <td style="border:1px solid #ddd; padding:8px;">程度</td>
+                                        <td style="border:1px solid #ddd; padding:8px;">處置</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border:1px solid #ddd; padding:8px;"><0.5</td>
+                                        <td style="border:1px solid #ddd; padding:8px; background:#d1fae5;">正常</td>
+                                        <td style="border:1px solid #ddd; padding:8px;">持續監測</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border:1px solid #ddd; padding:8px;">0.5-1.0</td>
+                                        <td style="border:1px solid #ddd; padding:8px; background:#fef3c7;">輕度休克</td>
+                                        <td style="border:1px solid #ddd; padding:8px;">建立靜脈通路</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border:1px solid #ddd; padding:8px;">1.0-1.5</td>
+                                        <td style="border:1px solid #ddd; padding:8px; background:#fed7aa;">中度休克</td>
+                                        <td style="border:1px solid #ddd; padding:8px;">積極輸液復甦</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border:1px solid #ddd; padding:8px;">>1.5</td>
+                                        <td style="border:1px solid #ddd; padding:8px; background:#fee2e2;">重度休克</td>
+                                        <td style="border:1px solid #ddd; padding:8px;">緊急處置</td>
+                                    </tr>
+                                </table>
+                                
+                                <div style="margin-top: 15px; background: #fef2f2; padding: 10px; border-radius: 5px;">
+                                    <strong>⚠️ 注意：</strong>
+                                    <ul>
+                                        <li>休克指數 = 心率 ÷ 收縮壓</li>
+                                        <li>懷孕婦女正常值較高（0.7-1.0）</li>
+                                        <li>老人對指數變化較不敏感</li>
+                                        <li>需結合臨床症狀綜合判斷</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 辛辛那提中风评估计算器 -->
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">6</div>
+                        辛辛那提中風評估工具
+                    </div>
+                    
+                    <div class="calculator-container" style="background: #f0f9ff; border-radius: 15px; padding: 20px; margin: 20px 0;">
+                        <h4 style="color: #1e40af; margin-bottom: 15px;">🧠 CPSS中風篩檢評估</h4>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px;">
+                            <div style="background: white; border-radius: 10px; padding: 15px;">
+                                <div style="margin-bottom: 15px;">
+                                    <label style="display: block; margin-bottom: 10px; font-weight: bold;">1. 臉部表情測試：</label>
+                                    <select id="faceTest" style="width: 100%; padding: 10px; border: 2px solid #3b82f6; border-radius: 5px;">
+                                        <option value="0">正常對稱微笑</option>
+                                        <option value="1">臉部不對稱或歪斜</option>
+                                    </select>
+                                </div>
+                                
+                                <div style="margin-bottom: 15px;">
+                                    <label style="display: block; margin-bottom: 10px; font-weight: bold;">2. 手臂舉起測試：</label>
+                                    <select id="armTest" style="width: 100%; padding: 10px; border: 2px solid #3b82f6; border-radius: 5px;">
+                                        <option value="0">雙手能維持10秒</option>
+                                        <option value="1">一側手臂下垂或無法舉起</option>
+                                    </select>
+                                </div>
+                                
+                                <div style="margin-bottom: 15px;">
+                                    <label style="display: block; margin-bottom: 10px; font-weight: bold;">3. 言語能力測試：</label>
+                                    <select id="speechTest" style="width: 100%; padding: 10px; border: 2px solid #3b82f6; border-radius: 5px;">
+                                        <option value="0">言語清晰正常</option>
+                                        <option value="1">口齒不清或用詞錯誤</option>
+                                    </select>
+                                </div>
+                                
+                                <button onclick="calculateCPSS()" 
+                                        style="width: 100%; margin-top: 15px; padding: 12px; background: linear-gradient(45deg, #3b82f6, #1e40af); color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">
+                                    評估中風風險
+                                </button>
+                                
+                                <div id="cpssResult" style="margin-top: 15px; padding: 10px; background: #dbeafe; border-radius: 5px; display: none;"></div>
+                            </div>
+                            
+                            <div style="background: white; border-radius: 10px; padding: 15px;">
+                                <h5 style="color: #1e40af;">📋 評估指引</h5>
+                                
+                                <div style="margin-bottom: 15px;">
+                                    <strong>臉部測試：</strong>
+                                    <p>請患者「露齒微笑」或「齜牙咧嘴」</p>
+                                </div>
+                                
+                                <div style="margin-bottom: 15px;">
+                                    <strong>手臂測試：</strong>
+                                    <p>請患者閉眼，雙手平舉90度維持10秒</p>
+                                </div>
+                                
+                                <div style="margin-bottom: 15px;">
+                                    <strong>言語測試：</strong>
+                                    <p>請患者說「今天天氣很好」</p>
+                                </div>
+                                
+                                <div style="background: #fef3c7; padding: 10px; border-radius: 5px; margin-top: 15px;">
+                                    <strong>🚨 重要：</strong>任何一項異常，中風機率即達72%以上，應立即按中風流程處理！
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 单位换算 -->
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">7</div>
+                        醫療單位換算
+                    </div>
+                    
+                    <div class="calculator-container" style="background: #f0f9ff; border-radius: 15px; padding: 20px; margin: 20px 0;">
+                        <h4 style="color: #1e40af; margin-bottom: 15px;">🔄 單位換算器</h4>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+                            <div style="background: white; border-radius: 10px; padding: 15px;">
+                                <h5 style="color: #1e40af;">🌡️ 溫度換算</h5>
+                                <p><strong>°F = (°C × 9/5) + 32</strong></p>
+                                <p><strong>°C = (°F - 32) × 5/9</strong></p>
+                                <ul>
+                                    <li>正常體溫：36.5-37.5°C / 97.7-99.5°F</li>
+                                    <li>發燒：>38°C / >100.4°F</li>
+                                    <li>低體溫：<35°C / <95°F</li>
+                                </ul>
+                            </div>
+                            
+                            <div style="background: white; border-radius: 10px; padding: 15px;">
+                                <h5 style="color: #1e40af;">⚖️ 重量換算</h5>
+                                <p><strong>1 kg = 2.2 lbs</strong></p>
+                                <p><strong>1 lb = 0.45 kg</strong></p>
+                                <ul>
+                                    <li>新生兒平均：3.2 kg / 7 lbs</li>
+                                    <li>1歲兒童約：10 kg / 22 lbs</li>
+                                    <li>成人平均：70 kg / 154 lbs</li>
+                                </ul>
+                            </div>
+                            
+                            <div style="background: white; border-radius: 10px; padding: 15px;">
+                                <h5 style="color: #1e40af;">💧 容量換算</h5>
+                                <p><strong>1 L = 1000 ml</strong></p>
+                                <p><strong>1 oz = 30 ml</strong></p>
+                                <ul>
+                                    <li>標準IV袋：250ml, 500ml, 1000ml</li>
+                                    <li>小兒輸液：通常<20ml/kg/次</li>
+                                </ul>
+                            </div>
+                            
+                            <div style="background: white; border-radius: 10px; padding: 15px;">
+                                <h5 style="color: #1e40af;">🩺 壓力換算</h5>
+                                <p><strong>1 mmHg = 1.36 cmH₂O</strong></p>
+                                <p><strong>1 cmH₂O = 0.74 mmHg</strong></p>
+                                <ul>
+                                    <li>正常血壓：120/80 mmHg</li>
+                                    <li>高血壓：>140/90 mmHg</li>
+                                    <li>低血壓：<90/60 mmHg</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 小儿救护流程 -->
+        <div id="pediatric" class="tab-content">
+            <div class="flowchart">
+                <div class="warning">
+                    ⚠️ 小兒救護重點：評估三角（ABC）+ 年齡分組處置 + 體重評估
+                </div>
+                
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">1</div>
+                        年齡分組與體重評估
+                    </div>
+                    <div class="assessment">
+                        <strong>分組標準：</strong>
+                        <ul>
+                            <li><strong>新生兒：</strong>出生後1個月內（含臍帶）</li>
+                            <li><strong>嬰兒：</strong>1個月 - 1歲</li>
+                            <li><strong>小兒：</strong>1歲 - 青春期</li>
+                            <li><strong>青少年：</strong>青春期後或體重>55kg</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="treatment">
+                        <strong>體重計算公式：</strong>
+                        <ul>
+                            <li>1-10歲：體重(kg) = (年齡 × 2) + 8</li>
+                            <li>藥物劑量以體重計算</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="arrow"><span>↓</span></div>
+                
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">2</div>
+                        小兒評估三角（ABC）
+                    </div>
+                    <div class="assessment">
+                        <strong>快速評估三大項目：</strong>
+                        <ul>
+                            <li><strong>A-Appearance（外觀）：</strong>活動力、哭聲、面部表情</li>
+                            <li><strong>B-Breathing（呼吸作功）：</strong>呼吸費力程度、輔助肌使用</li>
+                            <li><strong>C-Circulation（皮膚循環）：</strong>膚色、毛細血管充填</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="branch-container">
+                        <div class="critical">
+                            <strong>🚨 小兒危急判斷：</strong>
+                            <div class="sub-step">
+                                <strong>ABC任一項異常 = 小兒危急</strong>
+                                <table style="width:100%; border-collapse: collapse; margin-top:10px;">
+                                    <tr style="background:#f8f9fa; font-weight:bold;">
+                                        <td style="border:1px solid #ddd; padding:8px;">A外觀</td>
+                                        <td style="border:1px solid #ddd; padding:8px;">B呼吸</td>
+                                        <td style="border:1px solid #ddd; padding:8px;">C循環</td>
+                                        <td style="border:1px solid #ddd; padding:8px;">初步判斷</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border:1px solid #ddd; padding:8px;">✅正常</td>
+                                        <td style="border:1px solid #ddd; padding:8px;">❌異常</td>
+                                        <td style="border:1px solid #ddd; padding:8px;">✅正常</td>
+                                        <td style="border:1px solid #ddd; padding:8px; background:#fee2e2;">呼吸問題</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border:1px solid #ddd; padding:8px;">❌異常</td>
+                                        <td style="border:1px solid #ddd; padding:8px;">❌異常</td>
+                                        <td style="border:1px solid #ddd; padding:8px;">✅正常</td>
+                                        <td style="border:1px solid #ddd; padding:8px; background:#fef2f2;">嚴重呼吸問題</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border:1px solid #ddd; padding:8px;">✅正常</td>
+                                        <td style="border:1px solid #ddd; padding:8px;">✅正常</td>
+                                        <td style="border:1px solid #ddd; padding:8px;">❌異常</td>
+                                        <td style="border:1px solid #ddd; padding:8px; background:#fee2e2;">循環問題</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border:1px solid #ddd; padding:8px;">❌異常</td>
+                                        <td style="border:1px solid #ddd; padding:8px;">✅正常</td>
+                                        <td style="border:1px solid #ddd; padding:8px;">❌異常</td>
+                                        <td style="border:1px solid #ddd; padding:8px; background:#fef2f2;">嚴重循環問題</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border:1px solid #ddd; padding:8px;">❌異常</td>
+                                        <td style="border:1px solid #ddd; padding:8px;">❌異常</td>
+                                        <td style="border:1px solid #ddd; padding:8px;">❌異常</td>
+                                        <td style="border:1px solid #ddd; padding:8px; background:#991b1b; color:white;">心肺衰竭</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="arrow"><span>↓</span></div>
+                
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">3</div>
+                        小兒CPR（依年齡分組）
+                    </div>
+                    
+                    <div class="branch-container">
+                        <div class="sub-step">
+                            <strong>👶 新生兒CPR（有臍帶）：</strong>
+                            <div class="treatment">
+                                <strong>操作要點：</strong>
+                                <ul>
+                                    <li><strong>按壓位置：</strong>胸骨正中央，兩乳頭連線下方</li>
+                                    <li><strong>按壓方法：</strong>雙手拇指併攏法或單手兩指法</li>
+                                    <li><strong>按壓深度：</strong>胸部前後徑1/3</li>
+                                    <li><strong>按壓頻率：</strong>120次/分鐘</li>
+                                    <li><strong>壓胸:吹氣比例：</strong>3:1（90次按壓+30次通氣）</li>
+                                    <li><strong>檢查脈搏：</strong>臍脈搏或肱動脈搏</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="critical">
+                                <strong>特殊處置：</strong>
+                                <ul>
+                                    <li>心率<100次/分：袋瓣罩通氣40-60次/分，30秒</li>
+                                    <li>心率<60次/分：開始CPR</li>
+                                    <li>每30週期或60秒檢查脈搏</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="sub-step">
+                            <strong>🍼 嬰兒CPR（1個月-1歲）：</strong>
+                            <div class="treatment">
+                                <strong>操作要點：</strong>
+                                <ul>
+                                    <li><strong>按壓位置：</strong>胸骨正中央，兩乳頭連線下方</li>
+                                    <li><strong>按壓方法：</strong>雙手拇指併攏法（2人）或單手兩指法（1人）</li>
+                                    <li><strong>按壓深度：</strong>約4公分或胸部前後徑1/3</li>
+                                    <li><strong>按壓頻率：</strong>100-120次/分鐘</li>
+                                    <li><strong>壓胸:吹氣比例：</strong>30:2（1人）或15:2（2人）</li>
+                                    <li><strong>檢查脈搏：</strong>肱動脈搏</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="assessment">
+                                <strong>特殊注意：</strong>
+                                <ul>
+                                    <li>墊肩姿勢維持呼吸道暢通</li>
+                                    <li>脈搏≥60次/分且正常呼吸即停止CPR</li>
+                                    <li>每2分鐘更換按壓者</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="sub-step">
+                            <strong>🧒 小兒CPR（1歲-青春期）：</strong>
+                            <div class="treatment">
+                                <strong>操作要點：</strong>
+                                <ul>
+                                    <li><strong>按壓位置：</strong>胸骨下半部</li>
+                                    <li><strong>按壓方法：</strong>單手掌根（小體型）或雙手（大體型）</li>
+                                    <li><strong>按壓深度：</strong>約5公分或胸部前後徑1/3</li>
+                                    <li><strong>按壓頻率：</strong>100-120次/分鐘</li>
+                                    <li><strong>壓胸:吹氣比例：</strong>30:2（1人）或15:2（2人）</li>
+                                    <li><strong>檢查脈搏：</strong>頸動脈搏</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="assessment">
+                                <strong>輔助通氣頻率：</strong>
+                                <ul>
+                                    <li>有脈搏：20-30次/分（每2-3秒1次）</li>
+                                    <li>進階呼吸道建立後：每2-3秒1次</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="arrow"><span>↓</span></div>
+                
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">4</div>
+                        小兒呼吸道異物處理
+                    </div>
+                    
+                    <div class="branch-container">
+                        <div class="sub-step">
+                            <strong>🍼 嬰兒異物哽塞（<1歲）：</strong>
+                            <div class="abnormal">
+                                <strong>有反應（拍背壓胸法）：</strong>
+                                <div class="treatment">
+                                    <strong>步驟：</strong>
+                                    <ol>
+                                        <li>穩固抱嬰兒（坐姿），支撐下顎頸部</li>
+                                        <li>嬰兒面朝下，頭比軀幹低</li>
+                                        <li>手掌根在肩胛骨間擊打5下</li>
+                                        <li>翻轉面朝上，胸部按壓5下</li>
+                                        <li>重複直到異物排出或無反應</li>
+                                    </ol>
+                                </div>
+                            </div>
+                            
+                            <div class="critical">
+                                <strong>無反應：</strong>
+                                <div class="treatment">
+                                    <ul>
+                                        <li>打開呼吸道檢查可見異物</li>
+                                        <li>手指清除可見異物</li>
+                                        <li>給予1次人工呼吸</li>
+                                        <li>胸部按壓30次</li>
+                                        <li>重複直到阻塞解除或5個循環後送醫</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="sub-step">
+                            <strong>🧒 小兒異物哽塞（≥1歲）：</strong>
+                            <div class="abnormal">
+                                <strong>輕度哽塞：</strong>
+                                <div class="treatment">
+                                    <ul>
+                                        <li>詢問「噎到了嗎？」</li>
+                                        <li>鼓勵咳嗽，不要干擾</li>
+                                        <li>持續觀察</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="critical">
+                                <strong>重度哽塞（有意識）：</strong>
+                                <div class="treatment">
+                                    <strong>腹部推擠法：</strong>
+                                    <ol>
+                                        <li>站在患兒後方，弓箭步穩定</li>
+                                        <li>一手握拳置於肚臍上緣</li>
+                                        <li>另一手抱住握拳</li>
+                                        <li>快速向後上方推擠</li>
+                                        <li>重複直到異物排出或意識喪失</li>
+                                    </ol>
+                                </div>
+                                
+                                <div class="assessment">
+                                    <strong>特殊考量：</strong>
+                                    <ul>
+                                        <li>懷孕後期或肥胖：改用胸部按壓</li>
+                                        <li>小於8歲：謹慎使用，避免內臟損傷</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="arrow"><span>↓</span></div>
+                
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">5</div>
+                        小兒生命徵象正常值
+                    </div>
+                    <div class="assessment">
+                        <strong>年齡別正常值：</strong>
+                        <table style="width:100%; border-collapse: collapse; margin-top:10px;">
+                            <tr style="background:#f8f9fa; font-weight:bold;">
+                                <td style="border:1px solid #ddd; padding:8px;">年齡</td>
+                                <td style="border:1px solid #ddd; padding:8px;">心率（次/分）</td>
+                                <td style="border:1px solid #ddd; padding:8px;">呼吸（次/分）</td>
+                                <td style="border:1px solid #ddd; padding:8px;">收縮壓（mmHg）</td>
+                            </tr>
+                            <tr>
+                                <td style="border:1px solid #ddd; padding:8px;">新生兒</td>
+                                <td style="border:1px solid #ddd; padding:8px;">100-160</td>
+                                <td style="border:1px solid #ddd; padding:8px;">40-60</td>
+                                <td style="border:1px solid #ddd; padding:8px;">60-90</td>
+                            </tr>
+                            <tr>
+                                <td style="border:1px solid #ddd; padding:8px;">嬰兒</td>
+                                <td style="border:1px solid #ddd; padding:8px;">80-140</td>
+                                <td style="border:1px solid #ddd; padding:8px;">30-40</td>
+                                <td style="border:1px solid #ddd; padding:8px;">70-100</td>
+                            </tr>
+                            <tr>
+                                <td style="border:1px solid #ddd; padding:8px;">幼兒</td>
+                                <td style="border:1px solid #ddd; padding:8px;">80-130</td>
+                                <td style="border:1px solid #ddd; padding:8px;">25-30</td>
+                                <td style="border:1px solid #ddd; padding:8px;">80-110</td>
+                            </tr>
+                            <tr>
+                                <td style="border:1px solid #ddd; padding:8px;">學齡兒童</td>
+                                <td style="border:1px solid #ddd; padding:8px;">70-120</td>
+                                <td style="border:1px solid #ddd; padding:8px;">20-25</td>
+                                <td style="border:1px solid #ddd; padding:8px;">90-120</td>
+                            </tr>
+                        </table>
+                    </div>
+                    
+                    <div class="critical">
+                        <strong>🚨 小兒危急徵象：</strong>
+                        <ul>
+                            <li>心率：>180或<60次/分（嬰兒）、>160或<60次/分（小兒）</li>
+                            <li>呼吸：>60或<20次/分</li>
+                            <li>收縮壓：低於（70 + 年齡×2）mmHg</li>
+                            <li>體溫：>41°C或<32°C</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="arrow"><span>↓</span></div>
+                
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">6</div>
+                        小兒特殊處置
+                    </div>
+                    
+                    <div class="branch-container">
+                        <div class="sub-step">
+                            <strong>🌡️ 發燒處理：</strong>
+                            <div class="treatment">
+                                <ul>
+                                    <li>物理降溫：脫除過多衣物</li>
+                                    <li>溫水擦拭（避免冰敷）</li>
+                                    <li>補充水分</li>
+                                    <li>監測體溫變化</li>
+                                </ul>
+                            </div>
+                            <div class="critical">
+                                <strong>熱痙攣：</strong>發作時側躺、保護頭部、記錄發作時間
+                            </div>
+                        </div>
+                        
+                        <div class="sub-step">
+                            <strong>🤧 小兒呼吸急症：</strong>
+                            <div class="abnormal">
+                                <strong>哮吼症：</strong>
+                                <div class="condition">症狀：犬吠樣咳嗽、吸氣性喘鳴、聲音嘶啞</div>
+                                <div class="treatment">處置：冷霧治療 → 坐姿 → 避免激動 → 類固醇</div>
+                            </div>
+                            
+                            <div class="abnormal">
+                                <strong>會厭炎：</strong>
+                                <div class="condition">症狀：高燒、吞嚥困難、流口水、三腳架坐姿</div>
+                                <div class="treatment">處置：避免檢查口腔 → 保持坐姿 → 緊急氣管內插管準備</div>
+                            </div>
+                        </div>
+                        
+                        <div class="sub-step">
+                            <strong>🧠 小兒神經急症：</strong>
+                            <div class="abnormal">
+                                <strong>癲癇重積：</strong>
+                                <div class="condition">定義：持續>5分鐘或重複發作未恢復意識</div>
+                                <div class="treatment">
+                                    <strong>處置：</strong>
+                                    <ul>
+                                        <li>側躺位保護氣道</li>
+                                        <li>血糖測定</li>
+                                        <li>勿強行約束</li>
+                                        <li>記錄發作時間與型態</li>
+                                        <li>準備止抽藥物</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 特殊情况处置 -->
+        <div id="special" class="tab-content">
+            <div class="flowchart">
+                <div class="warning">
+                    ⚠️ 特殊情況：急產接生、中毒處理、過敏反應、環境急症
+                </div>
+                
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">1</div>
+                        急產接生
+                    </div>
+                    <div class="assessment">
+                        <strong>接生指標：</strong>
+                        <ul>
+                            <li>胎頭已外露</li>
+                            <li>產婦有強烈便意感</li>
+                            <li>無法及時到達醫院</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="treatment">
+                        <strong>接生流程：</strong>
+                        <ol>
+                            <li>產婦平躺、雙膝彎曲張開</li>
+                            <li>無菌技術戴手套</li>
+                            <li>保護胎頭及會陰</li>
+                            <li>檢查臍帶繞頸並處理</li>
+                            <li>協助肩部娩出</li>
+                            <li>清理新生兒呼吸道</li>
+                            <li>擦乾保溫</li>
+                            <li>臍帶處理：兩處夾緊後剪斷</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="branch-container">
+                        <div class="critical">
+                            <strong>🆘 新生兒窘迫：</strong>
+                            <div class="treatment">
+                                <ul>
+                                    <li>立即清理口鼻分泌物</li>
+                                    <li>刺激足底促進呼吸</li>
+                                    <li>保溫乾燥</li>
+                                    <li>評估心率呼吸</li>
+                                    <li>必要時新生兒CPR</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="abnormal">
+                            <strong>產後併發症：</strong>
+                            <div class="treatment">
+                                <ul>
+                                    <li>產後大出血：子宮按摩、下肢抬高</li>
+                                    <li>胎盤滯留：勿強行牽拉臍帶</li>
+                                    <li>產婦休克：輸液復甦、緊急後送</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="arrow"><span>↓</span></div>
+                
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">2</div>
+                        中毒處理
+                    </div>
+                    <div class="assessment">
+                        <strong>中毒類型識別：</strong>
+                        <ul>
+                            <li>藥物過量</li>
+                            <li>化學物質</li>
+                            <li>一氧化碳</li>
+                            <li>農藥中毒</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="branch-container">
+                        <div class="sub-step">
+                            <strong>💊 藥物中毒：</strong>
+                            <div class="treatment">
+                                <strong>一般處置：</strong>
+                                <ul>
+                                    <li>維持生命徵象</li>
+                                    <li>活性炭給予（口服中毒）</li>
+                                    <li>催吐禁忌：腐蝕性、石油類、意識不清</li>
+                                    <li>收集毒物容器資料</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="critical">
+                                <strong>特殊解毒劑：</strong>
+                                <ul>
+                                    <li>鴉片類：Naloxone 0.4-2mg IV</li>
+                                    <li>苯二氮平類：Flumazenil</li>
+                                    <li>甲醇/乙二醇：乙醇</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="sub-step">
+                            <strong>☁️ 一氧化碳中毒：</strong>
+                            <div class="condition">症狀：頭痛、暈眩、噁心、意識模糊、櫻桃紅膚色</div>
+                            <div class="treatment">
+                                <ul>
+                                    <li>立即移離現場</li>
+                                    <li>100%高濃度氧氣</li>
+                                    <li>評估意識程度</li>
+                                    <li>準備高壓氧治療</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="arrow"><span>↓</span></div>
+                
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">3</div>
+                        過敏性反應
+                    </div>
+                    <div class="assessment">
+                        <strong>嚴重度分級：</strong>
+                        <ul>
+                            <li><strong>輕度：</strong>皮膚紅疹、搔癢</li>
+                            <li><strong>中度：</strong>蕁麻疹、血管性水腫</li>
+                            <li><strong>重度：</strong>過敏性休克</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="branch-container">
+                        <div class="critical">
+                            <strong>⚡ 過敏性休克：</strong>
+                            <div class="condition">
+                                <strong>症狀：</strong>
+                                <ul>
+                                    <li>皮膚：廣泛蕁麻疹、血管水腫</li>
+                                    <li>呼吸：喘鳴、呼吸困難、喉頭水腫</li>
+                                    <li>循環：低血壓、心搏過速、休克</li>
+                                    <li>神經：焦慮、意識改變</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="emergency">腎上腺素是救命藥物！</div>
+                            <div class="treatment">
+                                <strong>腎上腺素自動注射筆使用：</strong>
+                                <ol>
+                                    <li>取出注射筆，橘色端朝下</li>
+                                    <li>移除藍色安全裝置</li>
+                                    <li>垂直刺入大腿前外側</li>
+                                    <li>聽到「喀」聲，維持3秒</li>
+                                    <li>按摩注射部位10秒</li>
+                                    <li>必要時5-15分鐘後重複給予</li>
+                                </ol>
+                            </div>
+                            
+                            <div class="treatment">
+                                <strong>輔助治療：</strong>
+                                <ul>
+                                    <li>氧氣治療</li>
+                                    <li>大口徑IV建立</li>
+                                    <li>輸液復甦</li>
+                                    <li>準備氣管內插管</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="arrow"><span>↓</span></div>
+                
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">4</div>
+                        環境急症
+                    </div>
+                    
+                    <div class="branch-container">
+                        <div class="sub-step">
+                            <strong>🌡️ 熱急症：</strong>
+                            <div class="abnormal">
+                                <strong>熱衰竭：</strong>
+                                <div class="condition">症狀：大量出汗、虛弱、噁心、體溫正常或微升</div>
+                                <div class="treatment">處置：移至陰涼處 → 脫除衣物 → 補充電解質 → 降溫</div>
+                            </div>
+                            
+                            <div class="critical">
+                                <strong>熱中暑：</strong>
+                                <div class="condition">症狀：高體溫>40°C、意識改變、停止出汗</div>
+                                <div class="treatment">
+                                    <strong>緊急降溫：</strong>
+                                    <ul>
+                                        <li>冰敷大血管區域</li>
+                                        <li>風扇散熱</li>
+                                        <li>冷生理食鹽水輸液</li>
+                                        <li>監測體溫變化</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="sub-step">
+                            <strong>❄️ 低體溫症：</strong>
+                            <div class="abnormal">
+                                <strong>輕度（32-35°C）：</strong>
+                                <div class="treatment">處置：移除濕冷衣物 → 保溫毛毯 → 溫飲品</div>
+                            </div>
+                            
+                            <div class="critical">
+                                <strong>重度（<32°C）：</strong>
+                                <div class="treatment">
+                                    <ul>
+                                        <li>緩慢復溫（每小時1-2°C）</li>
+                                        <li>溫輸液（37-42°C）</li>
+                                        <li>避免劇烈移動</li>
+                                        <li>CPR可能需延長</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="sub-step">
+                            <strong>🏊 溺水救護：</strong>
+                            <div class="treatment">
+                                <strong>救援原則：</strong>
+                                <ol>
+                                    <li>確保救援者安全</li>
+                                    <li>移除患者離開水中</li>
+                                    <li>頸椎保護（跳水意外）</li>
+                                    <li>立即評估呼吸心跳</li>
+                                    <li>開始CPR（勿先排水）</li>
+                                    <li>預防低體溫</li>
+                                </ol>
+                            </div>
+                            
+                            <div class="critical">
+                                <strong>誤區澄清：</strong>
+                                <ul>
+                                    <li>❌ 不要試圖排出肺部積水</li>
+                                    <li>❌ 不要等待水流出再開始CPR</li>
+                                    <li>✅ 立即開始人工呼吸和胸外按壓</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="arrow"><span>↓</span></div>
+                
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">5</div>
+                        精神急症處理
+                    </div>
+                    
+                    <div class="branch-container">
+                        <div class="sub-step">
+                            <strong>🧠 精神科急症：</strong>
+                            <div class="assessment">
+                                <strong>評估要點：</strong>
+                                <ul>
+                                    <li>是否有傷害自己或他人意圖</li>
+                                    <li>現實判斷能力</li>
+                                    <li>藥物使用史</li>
+                                    <li>精神病史</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="critical">
+                                <strong>暴力行為/自傷：</strong>
+                                <div class="treatment">
+                                    <strong>處理原則：</strong>
+                                    <ul>
+                                        <li>確保現場安全</li>
+                                        <li>去除危險物品</li>
+                                        <li>平靜溝通</li>
+                                        <li>必要時請警方協助</li>
+                                        <li>避免物理約束</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="abnormal">
+                                <strong>焦慮發作：</strong>
+                                <div class="condition">症狀：過度換氣、胸悶、四肢麻木、心悸</div>
+                                <div class="treatment">處置：紙袋呼吸法 → 安撫情緒 → 緩慢深呼吸指導</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="arrow"><span>↓</span></div>
+                
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">6</div>
+                        藥物使用指南與禁忌症
+                    </div>
+                    
+                    <div class="branch-container">
+                        <div class="sub-step">
+                            <strong>💊 EMT-1可用藥物：</strong>
+                            
+                            <div class="treatment">
+                                <strong>硝化甘油（NTG）：</strong>
+                                <ul>
+                                    <li><strong>適應症：</strong>胸痛疑似心絞痛</li>
+                                    <li><strong>劑量：</strong>0.4mg舌下含片</li>
+                                    <li><strong>頻率：</strong>每5分鐘1次，最多3次</li>
+                                    <li><strong>禁忌症：</strong>收縮壓<90mmHg、服用威而鋼</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="treatment">
+                                <strong>支氣管擴張劑（MDI/DPI）：</strong>
+                                <ul>
+                                    <li><strong>適應症：</strong>氣喘、COPD急性發作</li>
+                                    <li><strong>MDI使用：</strong>搖晃15-20次 → 深吐氣 → 含住吸嘴 → 按壓同時緩慢吸氣 → 閉氣10秒</li>
+                                    <li><strong>DPI使用：</strong>旋轉啟動 → 深吐氣 → 快速深吸氣 → 閉氣10秒</li>
+                                    <li><strong>間隔：</strong>效果不佳可1分鐘後重複</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="treatment">
+                                <strong>腎上腺素自動注射筆：</strong>
+                                <ul>
+                                    <li><strong>適應症：</strong>過敏性休克</li>
+                                    <li><strong>劑量：</strong>成人0.3mg、兒童0.15mg</li>
+                                    <li><strong>部位：</strong>大腿前外側</li>
+                                    <li><strong>重複：</strong>5-15分鐘後可重複使用</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="sub-step">
+                            <strong>🚫 重要禁忌症：</strong>
+                            <div class="critical">
+                                <ul>
+                                    <li><strong>NTG禁忌：</strong>低血壓、服用PDE5抑制劑</li>
+                                    <li><strong>氧氣注意：</strong>COPD患者謹慎使用高濃度氧氣</li>
+                                    <li><strong>阿斯匹靈禁忌：</strong>胃出血史、嚴重肝腎功能不全</li>
+                                    <li><strong>腎上腺素禁忌：</strong>相對禁忌較少，過敏性休克時效益大於風險</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="arrow"><span>↓</span></div>
+                
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">7</div>
+                        時間窗與後送決策
+                    </div>
+                    
+                    <div class="critical">
+                        <strong>⏰ 關鍵時間窗：</strong>
+                        <ul>
+                            <li><strong>心跳停止：</strong>4分鐘內CPR，8分鐘內ALS</li>
+                            <li><strong>急性心肌梗塞：</strong>症狀發作12小時內PCI</li>
+                            <li><strong>急性中風：</strong>4.5小時內t-PA，6-24小時內血管內治療</li>
+                            <li><strong>創傷黃金時間：</strong>1小時內到達創傷中心</li>
+                            <li><strong>嚴重過敏：</strong>腎上腺素越早使用效果越好</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="treatment">
+                        <strong>後送醫院選擇：</strong>
+                        <ul>
+                            <li><strong>創傷中心：</strong>重大外傷、多發性創傷</li>
+                            <li><strong>心導管醫院：</strong>急性冠心症</li>
+                            <li><strong>中風中心：</strong>疑似急性腦中風</li>
+                            <li><strong>兒童醫院：</strong>小兒危急重症</li>
+                            <li><strong>精神專科：</strong>精神科急症</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">8</div>
+                        品質管制與交班
+                    </div>
+                    <div class="assessment">
+                        <strong>操作品質指標：</strong>
+                        <ul>
+                            <li>胸外按壓深度：成人5-6cm、兒童5cm、嬰兒4cm</li>
+                            <li>按壓頻率：100-120次/分鐘</li>
+                            <li>按壓中斷時間：<10秒</li>
+                            <li>通氣量：看到胸廓起伏即可</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="treatment">
+                        <strong>交班ISBAR：</strong>
+                        <ul>
+                            <li><strong>I-Introduction：</strong>救護車代號、EMT姓名</li>
+                            <li><strong>S-Situation：</strong>患者基本資料、主訴</li>
+                            <li><strong>B-Background：</strong>病史、用藥史、過敏史</li>
+                            <li><strong>A-Assessment：</strong>生命徵象、處置結果</li>
+                            <li><strong>R-Recommendation：</strong>建議檢查或治療</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('trauma')">🩸 外科（創傷）流程</button>
+            <button class="tab" onclick="showTab('medical')">💊 非外科（內科）流程</button>
+            <button class="tab" onclick="showTab('pediatric')">👶 小兒救護流程</button>
+            <button class="tab" onclick="showTab('special')">🚨 特殊情況處置</button>
+            <button class="tab" onclick="showTab('equipment')">🔧 設備操作指南</button>
+            <button class="tab" onclick="showTab('calculator')">🧮 劑量計算器</button>
+        </div>
+        
+        <!-- 创伤流程 -->
+        <div id="trauma" class="tab-content active">
+            <div class="flowchart">
+                <div class="warning">
+                    ⚠️ 創傷流程重點：X-A-B-C-D-E 原則（eXsanguinating-Airway-Breathing-Circulation-Disability-Exposure）
+                </div>
+                
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">1</div>
+                        自我保護與現場安全評估
+                    </div>
+                    <div class="assessment">
+                        <strong>評估項目：</strong>
+                        <ul>
+                            <li>現場環境是否安全</li>
+                            <li>是否需要請勤區支援</li>
+                            <li>傳染病感染控制</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="branch-container">
+                        <div class="abnormal">
+                            <strong>❌ 環境不安全：</strong>
+                            <div class="treatment">
+                                <strong>處置：</strong> 請勤區支援 → 再次評估現場環境是否安全 → 待安全後才能進入現場
+                            </div>
+                        </div>
+                        
+                        <div class="normal">
+                            <strong>✅ 環境安全：</strong>
+                            <div class="treatment">
+                                <strong>處置：</strong> 穿戴適當防護裝備 → 在防護措施未完備前保持1公尺安全距離
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="arrow"><span>↓</span></div>
+                
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">2</div>
+                        檢傷分類與專業展示
+                    </div>
+                    <div class="assessment">
+                        <strong>評估項目：</strong>
+                        <ul>
+                            <li>傷病患人數是否超過救護能量</li>
+                            <li>專業形象展示</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="branch-container">
+                        <div class="critical">
+                            <strong>🚨 大量傷患：</strong>
+                            <div class="treatment">
+                                <strong>處置：</strong> 立即請求支援 → 進行檢傷分類 → 決定處置與後送優先次序
+                            </div>
+                        </div>
+                        
+                        <div class="normal">
+                            <strong>✅ 一般情況：</strong>
+                            <div class="treatment">
+                                <strong>處置：</strong> 自我介紹 → 檢查救護設備位置是否適當
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="arrow"><span>↓</span></div>
+                
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">X</div>
+                        大量出血評估 (eXsanguinating)
+                    </div>
+                    <div class="assessment">
+                        <strong>評估項目：</strong> 快速檢查全身是否有立即可見之持續外出血情形
+                    </div>
+                    
+                    <div class="branch-container">
+                        <div class="critical">
+                            <strong>🩸 大量出血：</strong>
+                            <div class="emergency">立即止血優先於其他評估！</div>
+                            <div class="treatment">
+                                <strong>處置：</strong>
+                                <ul>
+                                    <li>直接加壓止血</li>
+                                    <li>使用止血帶（四肢大出血）</li>
+                                    <li>肢體抬高</li>
+                                    <li>壓迫止血點</li>
+                                </ul>
+                            </div>
+                            <div class="condition">
+                                <strong>可能病症：</strong> 動脈撕裂傷、穿刺傷、截肢傷、肝脾破裂
+                            </div>
+                        </div>
+                        
+                        <div class="normal">
+                            <strong>✅ 無明顯大量出血：</strong>
+                            <div class="treatment">
+                                <strong>處置：</strong> 繼續A-B-C-D-E評估
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="arrow"><span>↓</span></div>
+                
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">A</div>
+                        氣道評估 (Airway)
+                    </div>
+                    <div class="assessment">
+                        <strong>評估項目：</strong>
+                        <ul>
+                            <li>意識狀態（清、聲、痛、否）</li>
+                            <li>氣道是否通暢</li>
+                            <li>頸椎減移需求</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="branch-container">
+                        <div class="abnormal">
+                            <strong>❌ 意識不清或氣道阻塞：</strong>
+                            <div class="treatment">
+                                <strong>處置：</strong>
+                                <ul>
+                                    <li>外傷患者：下顎推舉法（頸椎減移）</li>
+                                    <li>清除異物或分泌物</li>
+                                    <li>使用口咽或鼻咽呼吸道</li>
+                                    <li>必要時抽吸</li>
+                                </ul>
+                            </div>
+                            <div class="condition">
+                                <strong>可能病症：</strong> 顱腦外傷、頸椎損傷、異物哽塞、上呼吸道出血
+                            </div>
+                        </div>
+                        
+                        <div class="normal">
+                            <strong>✅ 意識清楚且氣道通暢：</strong>
+                            <div class="treatment">
+                                <strong>處置：</strong> 維持頸椎減移 → 繼續B評估
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="arrow"><span>↓</span></div>
+                
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">B</div>
+                        呼吸評估 (Breathing)
+                    </div>
+                    <div class="assessment">
+                        <strong>評估項目：</strong>
+                        <ul>
+                            <li>呼吸深、淺、快、慢</li>
+                            <li>是否有異常呼吸音</li>
+                            <li>胸部起伏是否對稱</li>
+                            <li>評估時間不超過10秒</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="branch-container">
+                        <div class="critical">
+                            <strong>🚨 呼吸異常：</strong>
+                            <div class="sub-step">
+                                <strong>呼吸停止或嚴重窘迫：</strong>
+                                <div class="treatment">
+                                    <strong>處置：</strong> 立即袋瓣罩人工呼吸 → 給予氧氣 → 準備進階呼吸道
+                                </div>
+                                <div class="condition">可能病症：張力性氣胸、血胸、連枷胸</div>
+                            </div>
+                            
+                            <div class="sub-step">
+                                <strong>呼吸急促（>30次/分）：</strong>
+                                <div class="treatment">
+                                    <strong>處置：</strong> 高流量氧氣 → 協助坐姿 → 評估胸部外傷
+                                </div>
+                                <div class="condition">可能病症：肺挫傷、肋骨骨折、氣胸</div>
+                            </div>
+                        </div>
+                        
+                        <div class="normal">
+                            <strong>✅ 呼吸正常：</strong>
+                            <div class="treatment">
+                                <strong>處置：</strong> 持續監測呼吸狀況 → 繼續C評估
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="arrow"><span>↓</span></div>
+                
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">C</div>
+                        循環評估 (Circulation)
+                    </div>
+                    <div class="assessment">
+                        <strong>評估項目：</strong>
+                        <ul>
+                            <li>脈搏評估（頸動脈、橈動脈）</li>
+                            <li>膚色、末端循環</li>
+                            <li>微血管充填時間</li>
+                            <li>骨盆穩定度（外傷特有）</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="branch-container">
+                        <div class="critical">
+                            <strong>🚨 無脈搏：</strong>
+                            <div class="emergency">立即CPR + AED</div>
+                            <div class="treatment">
+                                <strong>處置：</strong>
+                                <ul>
+                                    <li>胸外按壓30:2比例</li>
+                                    <li>準備AED</li>
+                                    <li>每2分鐘評估脈搏</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="abnormal">
+                            <strong>❌ 休克徵象：</strong>
+                            <div class="sub-step">
+                                <strong>脈搏>150或<50次/分：</strong>
+                                <div class="treatment">處置：建立靜脈通路 → 輸液復甦 → 控制出血</div>
+                                <div class="condition">可能病症：失血性休克、心因性休克</div>
+                            </div>
+                            
+                            <div class="sub-step">
+                                <strong>血壓<90mmHg：</strong>
+                                <div class="treatment">處置：平躺 → 下肢抬高 → 快速輸液</div>
+                                <div class="condition">可能病症：內出血、多發性外傷</div>
+                            </div>
+                            
+                            <div class="sub-step">
+                                <strong>微血管充填>2秒：</strong>
+                                <div class="treatment">處置：保暖 → 輸液 → 尋找出血源</div>
+                                <div class="condition">可能病症：周邊血管收縮、低血容量</div>
+                            </div>
+                        </div>
+                        
+                        <div class="normal">
+                            <strong>✅ 循環穩定：</strong>
+                            <div class="treatment">
+                                <strong>處置：</strong> 持續監測生命徵象 → 繼續D評估
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="arrow"><span>↓</span></div>
+                
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">D</div>
+                        失能評估 (Disability)
+                    </div>
+                    <div class="assessment">
+                        <strong>評估項目：</strong>
+                        <ul>
+                            <li>昏迷指數（GCS）</li>
+                            <li>瞳孔大小及對光反應</li>
+                            <li>四肢感覺與運動功能</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="branch-container">
+                        <div class="critical">
+                            <strong>🧠 GCS ≤ 8分：</strong>
+                            <div class="treatment">
+                                <strong>處置：</strong>
+                                <ul>
+                                    <li>保護呼吸道</li>
+                                    <li>頸椎完全固定</li>
+                                    <li>準備插管</li>
+                                    <li>避免低血壓</li>
+                                </ul>
+                            </div>
+                            <div class="condition">可能病症：嚴重顱腦外傷、腦幹損傷</div>
+                        </div>
+                        
+                        <div class="abnormal">
+                            <strong>❌ GCS 9-13分：</strong>
+                            <div class="treatment">
+                                <strong>處置：</strong> 密切監測 → 頸椎固定 → 避免二次傷害
+                            </div>
+                            <div class="condition">可能病症：中度腦外傷、腦震盪</div>
+                        </div>
+                        
+                        <div class="abnormal">
+                            <strong>❌ 肢體功能異常：</strong>
+                            <div class="treatment">
+                                <strong>處置：</strong> 脊椎固定 → 四肢制動 → 評估感覺功能
+                            </div>
+                            <div class="condition">可能病症：脊髓損傷、周邊神經損傷</div>
+                        </div>
+                        
+                        <div class="normal">
+                            <strong>✅ 神經功能正常：</strong>
+                            <div class="treatment">
+                                <strong>處置：</strong> 繼續監測 → 進行E評估
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="arrow"><span>↓</span></div>
+                
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">E</div>
+                        暴露與身體檢查 (Exposure)
+                    </div>
+                    <div class="assessment">
+                        <strong>評估項目：</strong>
+                        <ul>
+                            <li>快速全身檢查（頭→頸→胸→腹→骨盆→四肢）</li>
+                            <li>尋找隱藏性外傷</li>
+                            <li>保持患者體溫</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="branch-container">
+                        <div class="sub-step">
+                            <strong>頭部檢查：</strong>
+                            <div class="abnormal">
+                                <strong>發現問題：</strong> 顱骨骨折、耳鼻出血、意識改變
+                                <div class="treatment">處置：頭部固定 → 側躺位（若無頸椎傷）→ 避免顱內壓升高</div>
+                            </div>
+                        </div>
+                        
+                        <div class="sub-step">
+                            <strong>胸部檢查：</strong>
+                            <div class="abnormal">
+                                <strong>發現問題：</strong> 胸廓不對稱、呼吸困難、皮下氣腫
+                                <div class="treatment">處置：胸部固定 → 氧氣治療 → 準備胸腔引流</div>
+                            </div>
+                        </div>
+                        
+                        <div class="sub-step">
+                            <strong>腹部檢查：</strong>
+                            <div class="abnormal">
+                                <strong>發現問題：</strong> 腹部腫脹、壓痛、腸管外露
+                                <div class="treatment">處置：勿觸摸內臟 → 生理食鹽水紗布覆蓋 → 快速後送</div>
+                            </div>
+                        </div>
+                        
+                        <div class="sub-step">
+                            <strong>骨盆與四肢檢查：</strong>
+                            <div class="abnormal">
+                                <strong>發現問題：</strong> 骨盆不穩定、四肢畸形、脈搏消失
+                                <div class="treatment">處置：骨盆固定帶 → 肢體制動 → 評估遠端脈搏</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="arrow"><span>↓</span></div>
+                
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">3</div>
+                        輔助檢查與病情評估
+                    </div>
+                    <div class="assessment">
+                        <strong>檢查項目：</strong>
+                        <ul>
+                            <li>生命徵象：血壓、脈搏、血氧、體溫</li>
+                            <li>血糖測定</li>
+                            <li>疼痛評估</li>
+                            <li>重點式身體檢查</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="branch-container">
+                        <div class="critical">
+                            <strong>🚨 危急個案：</strong>
+                            <div class="treatment">
+                                <strong>立即後送指標：</strong>
+                                <ul>
+                                    <li>GCS < 14分</li>
+                                    <li>呼吸 >30 或 <10次/分</li>
+                                    <li>脈搏 >150 或 <50次/分</li>
+                                    <li>收縮壓 >220 或 <90mmHg</li>
+                                    <li>血氧 <90%</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="arrow"><span>↓</span></div>
+                
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">4</div>
+                        固定與後送準備
+                    </div>
+                    <div class="treatment">
+                        <strong>處置流程：</strong>
+                        <ul>
+                            <li>上頸圈 → 上長背板 → 四肢固定</li>
+                            <li>建立靜脈通路（中級以上）</li>
+                            <li>持續監測生命徵象</li>
+                            <li>院前病情通報</li>
+                            <li>快速後送至適當醫院</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 非创伤流程 -->
+        <div id="medical" class="tab-content">
+            <div class="flowchart">
+                <div class="warning">
+                    ⚠️ 非創傷流程重點：A-B-C 原則 + 病史詢問 + 症狀導向評估
+                </div>
+                
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">1</div>
+                        自我保護與現場評估
+                    </div>
+                    <div class="assessment">
+                        <strong>評估項目：</strong>
+                        <ul>
+                            <li>現場環境安全</li>
+                            <li>感染控制措施</li>
+                            <li>患者數量評估</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="treatment">
+                        <strong>處置：</strong> 戴手套、口罩 → 保持1公尺安全距離 → 自我介紹 → 携帶救護設備放置適當位置
+                    </div>
+                </div>
+                
+                <div class="arrow"><span>↓</span></div>
+                
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">2</div>
+                        主訴與病史詢問
+                    </div>
+                    <div class="assessment">
+                        <strong>詢問內容（主訴-之前-吃-過-藥-敏-感）：</strong>
+                        <ul>
+                            <li><strong>主訴：</strong>哪裡不舒服？怎麼不舒服？何時開始？</li>
+                            <li><strong>之前：</strong>是否有類似症狀？</li>
+                            <li><strong>吃：</strong>最近進食情況</li>
+                            <li><strong>過：</strong>過去病史（高血壓、糖尿病、心臟病）</li>
+                            <li><strong>藥：</strong>目前服用藥物</li>
+                            <li><strong>敏：</strong>藥物或食物過敏史</li>
+                            <li><strong>感：</strong>最後感覺正常的時間</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="branch-container">
+                        <div class="critical">
+                            <strong>🚨 急性症狀識別：</strong>
+                            <div class="sub-step">
+                                <strong>💓 急性胸痛：</strong>
+                                <div class="condition">
+                                    <strong>典型症狀：</strong>胸骨後壓迫感、放射至左臂/下巴/後背、持續>15分鐘、伴冒汗/噁心
+                                </div>
+                                <div class="treatment">
+                                    <strong>立即處置：</strong>
+                                    <ul>
+                                        <li>氧氣 4-6L/min（若SpO2<90%）</li>
+                                        <li>NTG 0.4mg舌下含片（3次內）</li>
+                                        <li>阿斯匹靈 325mg咀嚼</li>
+                                        <li>12導程心電圖</li>
+                                        <li>建立IV通路</li>
+                                    </ul>
+                                </div>
+                                <div class="condition">可能診斷：STEMI、NSTEMI、不穩定心絞痛、主動脈剝離</div>
+                            </div>
+                            
+                            <div class="sub-step">
+                                <strong>🫁 急性呼吸困難：</strong>
+                                <div class="condition">
+                                    <strong>典型症狀：</strong>呼吸急促、喘鳴、胸悶、無法平躺、發紺
+                                </div>
+                                <div class="treatment">
+                                    <strong>立即處置：</strong>
+                                    <ul>
+                                        <li>坐姿或高枕臥位</li>
+                                        <li>氧氣治療 6-10L/min</li>
+                                        <li>協助MDI支氣管擴張劑</li>
+                                        <li>監測血氧飽和度</li>
+                                        <li>準備袋瓣罩輔助通氣</li>
+                                    </ul>
+                                </div>
+                                <div class="condition">可能診斷：急性氣喘、急性肺水腫、肺栓塞、COPD急性發作</div>
+                            </div>
+                            
+                            <div class="sub-step">
+                                <strong>🧠 急性意識改變：</strong>
+                                <div class="condition">
+                                    <strong>典型症狀：</strong>突然意識不清、言語不清、肢體無力、口眼歪斜
+                                </div>
+                                <div class="treatment">
+                                    <strong>立即處置：</strong>
+                                    <ul>
+                                        <li>側躺復甦姿勢</li>
+                                        <li>血糖測定</li>
+                                        <li>GFASTS中風評估</li>
+                                        <li>維持正常血壓</li>
+                                        <li>記錄發病時間</li>
+                                    </ul>
+                                </div>
+                                <div class="condition">可能診斷：急性腦中風、低血糖、癲癇重積狀態、藥物中毒</div>
+                            </div>
+                            
+                            <div class="sub-step">
+                                <strong>🎯 辛辛那提中風指數評估：</strong>
+                                <div class="critical">
+                                    <strong>CPSS快速篩檢（Cincinnati Prehospital Stroke Scale）：</strong>
+                                    <div class="assessment" style="margin: 15px 0;">
+                                        <strong>三大評估項目：</strong>
+                                        <table style="width:100%; border-collapse: collapse; margin-top:10px;">
+                                            <tr style="background:#f8f9fa; font-weight:bold;">
+                                                <td style="border:1px solid #ddd; padding:8px;">評估項目</td>
+                                                <td style="border:1px solid #ddd; padding:8px;">測試方法</td>
+                                                <td style="border:1px solid #ddd; padding:8px;">異常表現</td>
+                                                <td style="border:1px solid #ddd; padding:8px;">計分</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="border:1px solid #ddd; padding:8px;"><strong>臉部表情</strong></td>
+                                                <td style="border:1px solid #ddd; padding:8px;">請患者露齒微笑或齜牙咧嘴</td>
+                                                <td style="border:1px solid #ddd; padding:8px;">臉部兩側不對稱、嘴角歪斜</td>
+                                                <td style="border:1px solid #ddd; padding:8px;">異常=1分</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="border:1px solid #ddd; padding:8px;"><strong>手臂舉起</strong></td>
+                                                <td style="border:1px solid #ddd; padding:8px;">閉眼，雙手平舉90度維持10秒</td>
+                                                <td style="border:1px solid #ddd; padding:8px;">一側手臂下垂或無法舉起</td>
+                                                <td style="border:1px solid #ddd; padding:8px;">異常=1分</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="border:1px solid #ddd; padding:8px;"><strong>言語能力</strong></td>
+                                                <td style="border:1px solid #ddd; padding:8px;">請患者說「今天天氣很好」</td>
+                                                <td style="border:1px solid #ddd; padding:8px;">口齒不清、用詞錯誤、無法說話</td>
+                                                <td style="border:1px solid #ddd; padding:8px;">異常=1分</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    
+                                    <div class="treatment">
+                                        <strong>🎯 判讀標準：</strong>
+                                        <ul>
+                                            <li><strong>0分：</strong>中風機率<7%</li>
+                                            <li><strong>1分：</strong>中風機率約72%</li>
+                                            <li><strong>2分：</strong>中風機率約86%</li>
+                                            <li><strong>3分：</strong>中風機率約85%</li>
+                                        </ul>
+                                        
+                                        <div style="background: #fef2f2; border: 2px solid #dc2626; border-radius: 8px; padding: 15px; margin-top: 15px;">
+                                            <strong>⚡ 任一項目異常 = 立即按中風流程處理</strong>
+                                            <ul>
+                                                <li>記錄症狀發作確切時間</li>
+                                                <li>緊急後送中風中心</li>
+                                                <li>院前通報啟動中風小組</li>
+                                                <li>血糖<80mg/dL需先校正</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="arrow"><span>↓</span></div>
+                
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">A</div>
+                        氣道評估 (Airway)
+                    </div>
+                    <div class="assessment">
+                        <strong>評估項目：</strong>
+                        <ul>
+                            <li>意識狀態（GCS評估）</li>
+                            <li>氣道阻塞檢查</li>
+                            <li>嘔吐風險評估</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="branch-container">
+                        <div class="critical">
+                            <strong>🚨 氣道危急：</strong>
+                            <div class="emergency">GCS ≤ 8分或完全無反應</div>
+                            <div class="treatment">
+                                <strong>處置：</strong>
+                                <ul>
+                                    <li>立即側躺復甦姿勢</li>
+                                    <li>口咽呼吸道置入</li>
+                                    <li>準備抽吸設備</li>
+                                    <li>袋瓣罩輔助通氣</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="abnormal">
+                            <strong>❌ 輕度氣道問題：</strong>
+                            <div class="treatment">處置：頭後仰抬頦 → 清理口腔分泌物 → 監測意識</div>
+                        </div>
+                        
+                        <div class="normal">
+                            <strong>✅ 氣道通暢：</strong>
+                            <div class="treatment">處置：繼續B評估</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="arrow"><span>↓</span></div>
+                
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">B</div>
+                        呼吸評估 (Breathing)
+                    </div>
+                    <div class="assessment">
+                        <strong>評估項目：</strong>
+                        <ul>
+                            <li>呼吸頻率（正常：12-20次/分）</li>
+                            <li>呼吸深度與節律</li>
+                            <li>血氧飽和度（目標≥94%）</li>
+                            <li>輔助肌使用情況</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="branch-container">
+                        <div class="critical">
+                            <strong>🫁 呼吸衰竭：</strong>
+                            <div class="emergency">呼吸停止或<10次/分或>30次/分</div>
+                            <div class="treatment">
+                                <strong>處置：</strong>
+                                <ul>
+                                    <li>袋瓣罩正壓通氣10次/分</li>
+                                    <li>100%氧氣</li>
+                                    <li>準備進階呼吸道</li>
+                                    <li>監測胸廓起伏</li>
+                                </ul>
+                            </div>
+                            <div class="condition">可能病症：嚴重氣喘、肺水腫、藥物中毒、呼吸肌麻痺</div>
+                        </div>
+                        
+                        <div class="abnormal">
+                            <strong>❌ 呼吸窘迫：</strong>
+                            <div class="sub-step">
+                                <strong>氣喘發作：</strong>
+                                <div class="treatment">
+                                    <strong>處置：</strong>
+                                    <ul>
+                                        <li>協助MDI支氣管擴張劑</li>
+                                        <li>氧氣6-10L/min</li>
+                                        <li>坐姿或三腳架姿勢</li>
+                                        <li>監測用藥反應</li>
+                                    </ul>
+                                </div>
+                                <div class="condition">鑒別：氣喘vs過敏性支氣管痙攣vs心因性氣喘</div>
+                            </div>
+                            
+                            <div class="sub-step">
+                                <strong>肺水腫：</strong>
+                                <div class="treatment">
+                                    <strong>處置：</strong>
+                                    <ul>
+                                        <li>高流量氧氣或CPAP</li>
+                                        <li>坐姿減少靜脈回流</li>
+                                        <li>NTG減少前負荷</li>
+                                        <li>利尿劑（中級以上）</li>
+                                    </ul>
+                                </div>
+                                <div class="condition">可能病症：急性心衰、腎功能衰竭、高血壓性心臟病</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="arrow"><span>↓</span></div>
+                
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">C</div>
+                        循環評估 (Circulation)
+                    </div>
+                    <div class="assessment">
+                        <strong>評估項目：</strong>
+                        <ul>
+                            <li>脈搏：頻率、節律、強度</li>
+                            <li>血壓：收縮壓/舒張壓</li>
+                            <li>微血管充填時間</li>
+                            <li>頸靜脈怒張</li>
+                            <li>周邊水腫</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="branch-container">
+                        <div class="critical">
+                            <strong>💓 循環衰竭：</strong>
+                            <div class="sub-step">
+                                <strong>心跳停止：</strong>
+                                <div class="emergency">無頸動脈搏動</div>
+                                <div class="treatment">
+                                    <strong>CPR流程：</strong>
+                                    <ul>
+                                        <li>胸外按壓30:2（100-120次/分）</li>
+                                        <li>AED分析與電擊</li>
+                                        <li>每2分鐘評估脈搏</li>
+                                        <li>腎上腺素1mg IV（中級以上）</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="sub-step">
+                                <strong>嚴重心律不整：</strong>
+                                <div class="treatment">
+                                    <strong>處置：</strong>
+                                    <ul>
+                                        <li>心電圖監測</li>
+                                        <li>準備同步電擊</li>
+                                        <li>建立靜脈通路</li>
+                                        <li>監測血壓變化</li>
+                                    </ul>
+                                </div>
+                                <div class="condition">可能病症：心室性心搏過速、心房纖維顫動、病竇症候群</div>
+                            </div>
+                            
+                            <div class="sub-step">
+                                <strong>急性心肌梗塞：</strong>
+                                <div class="treatment">
+                                    <strong>黃金處置：</strong>
+                                    <ul>
+                                        <li>阿斯匹靈324mg咀嚼</li>
+                                        <li>NTG 0.4mg舌下（禁忌：<90mmHg、威爾鋼）</li>
+                                        <li>嗎啡止痛（中級以上）</li>
+                                        <li>12導程心電圖</li>
+                                        <li>緊急PCI醫院後送</li>
+                                    </ul>
+                                </div>
+                                <div class="condition">時間窗：症狀發作<12小時為最佳治療時機</div>
+                            </div>
+                        </div>
+                        
+                        <div class="abnormal">
+                            <strong>❌ 循環異常：</strong>
+                            <div class="sub-step">
+                                <strong>高血壓急症：</strong>
+                                <div class="treatment">處置：半坐臥位 → 安靜環境 → 避免快速降壓</div>
+                                <div class="condition">收縮壓>220mmHg或舒張壓>120mmHg</div>
+                            </div>
+                            
+                            <div class="sub-step">
+                                <strong>💔 休克評估與分類：</strong>
+                                <div class="critical">
+                                    <strong>休克的四大類型及處置：</strong>
+                                    
+                                    <div style="margin-top: 15px;">
+                                        <strong>🩸 失血性休克（Hypovolemic Shock）：</strong>
+                                        <div class="assessment">
+                                            <strong>臨床表現：</strong>
+                                            <ul>
+                                                <li>收縮壓 <90mmHg</li>
+                                                <li>心率 >100次/分</li>
+                                                <li>皮膚蒼白、濕冷</li>
+                                                <li>微血管充填時間 >2秒</li>
+                                                <li>尿量減少、意識改變</li>
+                                            </ul>
+                                        </div>
+                                        <div class="treatment">
+                                            <strong>處置：</strong>
+                                            <ul>
+                                                <li>雙大口徑IV建立（18G以上）</li>
+                                                <li>快速輸注生理食鹽水或林格氏液</li>
+                                                <li>成人：20ml/kg，兒童：20ml/kg</li>
+                                                <li>控制出血源</li>
+                                                <li>保溫、抬高下肢</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    
+                                    <div style="margin-top: 15px;">
+                                        <strong>💓 心因性休克（Cardiogenic Shock）：</strong>
+                                        <div class="assessment">
+                                            <strong>臨床表現：</strong>
+                                            <ul>
+                                                <li>頸靜脈怒張</li>
+                                                <li>肺水腫症狀</li>
+                                                <li>周邊水腫</li>
+                                                <li>心跳不規則</li>
+                                            </ul>
+                                        </div>
+                                        <div class="treatment">
+                                            <strong>處置：</strong>
+                                            <ul>
+                                                <li>半坐臥位</li>
+                                                <li>氧氣治療</li>
+                                                <li>限制輸液量</li>
+                                                <li>硝化甘油（如血壓允許）</li>
+                                                <li>監測心電圖</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    
+                                    <div style="margin-top: 15px;">
+                                        <strong>🔥 敗血性休克（Septic Shock）：</strong>
+                                        <div class="assessment">
+                                            <strong>臨床表現：</strong>
+                                            <ul>
+                                                <li>發燒（>38.5°C）或體溫過低（<36°C）</li>
+                                                <li>皮膚潮紅、溫暖</li>
+                                                <li>心率快速</li>
+                                                <li>呼吸急促</li>
+                                                <li>意識混亂</li>
+                                            </ul>
+                                        </div>
+                                        <div class="treatment">
+                                            <strong>處置：</strong>
+                                            <ul>
+                                                <li>積極輸液復甦</li>
+                                                <li>氧氣支持</li>
+                                                <li>體溫調控</li>
+                                                <li>尋找感染源</li>
+                                                <li>緊急後送</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    
+                                    <div style="margin-top: 15px;">
+                                        <strong>⚡ 過敏性休克（Anaphylactic Shock）：</strong>
+                                        <div class="assessment">
+                                            <strong>臨床表現：</strong>
+                                            <ul>
+                                                <li>蕁麻疹、血管性水腫</li>
+                                                <li>支氣管痙攣、喘鳴</li>
+                                                <li>噁心、嘔吐、腹瀉</li>
+                                                <li>血壓急速下降</li>
+                                            </ul>
+                                        </div>
+                                        <div class="treatment">
+                                            <strong>處置：</strong>
+                                            <ul>
+                                                <li><strong>立即給予腎上腺素</strong></li>
+                                                <li>大量輸液</li>
+                                                <li>氧氣治療</li>
+                                                <li>移除致敏原</li>
+                                                <li>準備氣道管理</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="emergency" style="margin-top: 20px;">
+                                        <strong>🚨 休克指數計算：</strong>
+                                        <p><strong>休克指數 = 心率 ÷ 收縮壓</strong></p>
+                                        <ul>
+                                            <li><strong><0.5：</strong>正常</li>
+                                            <li><strong>0.5-1.0：</strong>輕度休克</li>
+                                            <li><strong>1.0-1.5：</strong>中度休克</li>
+                                            <li><strong>>1.5：</strong>重度休克</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="arrow"><span>↓</span></div>
+                
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">3</div>
+                        重點身體檢查與專科評估
+                    </div>
+                    <div class="assessment">
+                        <strong>系統性檢查：</strong>
+                        <ul>
+                            <li>神經：GCS、瞳孔、四肢活動</li>
+                            <li>心肺：心音、呼吸音、頸靜脈</li>
+                            <li>腹部：腫脹、壓痛、腸鳴音</li>
+                            <li>皮膚：顏色、溫度、濕度</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="branch-container">
+                        <div class="sub-step">
+                            <strong>🧠 神經系統急症：</strong>
+                            <div class="critical">
+                                <strong>疑似急性中風：</strong>
+                                <div class="assessment">
+                                    <strong>GFASTS快速評估：</strong>
+                                    <ul>
+                                        <li><strong>G-Gaze：</strong>眼球運動（雙眼能否追蹤手指）</li>
+                                        <li><strong>F-Face：</strong>臉部對稱（微笑測試）</li>
+                                        <li><strong>A-Arms：</strong>舉臂測試（雙手平舉10秒）</li>
+                                        <li><strong>S-Speech：</strong>言語清晰度（複誦測試）</li>
+                                        <li><strong>T-Time：</strong>症狀發作時間</li>
+                                    </ul>
+                                </div>
+                                <div class="treatment">
+                                    <strong>處置：</strong>
+                                    <ul>
+                                        <li>側躺復甦姿勢</li>
+                                        <li>血糖測定排除低血糖</li>
+                                        <li>血壓監測（避免過度降壓）</li>
+                                        <li>記錄NIHSS評分</li>
+                                        <li>緊急後送中風中心</li>
+                                    </ul>
+                                </div>
+                                <div class="condition">
+                                    <strong>時間窗：</strong>
+                                    <ul>
+                                        <li>血栓溶解：4.5小時內</li>
+                                        <li>血管內取栓：6-24小時內</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="abnormal">
+                                <strong>癲癇發作：</strong>
+                                <div class="treatment">
+                                    <strong>處置：</strong>
+                                    <ul>
+                                        <li>移除周圍危險物品</li>
+                                        <li>側躺位防止誤吸</li>
+                                        <li>記錄發作時間</li>
+                                        <li>發作>5分鐘或重複發作立即後送</li>
+                                    </ul>
+                                </div>
+                                <div class="condition">可能原因：癲癇、低血糖、電解質異常、腦外傷</div>
+                            </div>
+                        </div>
+                        
+                        <div class="sub-step">
+                            <strong>🩸 代謝性急症：</strong>
+                            <div class="abnormal">
+                                <strong>血糖異常：</strong>
+                                <div class="assessment">
+                                    <strong>血糖測定：</strong>
+                                    <ul>
+                                        <li>低血糖：<60mg/dL</li>
+                                        <li>高血糖：>400mg/dL或顯示"High"</li>
+                                    </ul>
+                                </div>
+                                <div class="treatment">
+                                    <strong>處置：</strong>
+                                    <ul>
+                                        <li>低血糖：口服糖水（意識清楚）或IV葡萄糖</li>
+                                        <li>高血糖：大量輸液稀釋</li>
+                                        <li>監測意識變化</li>
+                                    </ul>
+                                </div>
+                                <div class="condition">可能病症：糖尿病酮酸中毒、高滲透壓昏迷、胰島素過量</div>
+                            </div>
+                            
+                            <div class="abnormal">
+                                <strong>過敏性反應：</strong>
+                                <div class="treatment">
+                                    <strong>處置：</strong>
+                                    <ul>
+                                        <li>腎上腺素自動注射筆</li>
+                                        <li>氧氣治療</li>
+                                        <li>建立大口徑IV</li>
+                                        <li>準備氣道管理</li>
+                                    </ul>
+                                </div>
+                                <div class="condition">症狀：蕁麻疹、血管性水腫、支氣管痙攣、循環性休克</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="arrow"><span>↓</span></div>
+                
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">4</div>
+                        生命徵象監測與輔助檢查
+                    </div>
+                    <div class="assessment">
+                        <strong>八大生命徵象：</strong>
+                        <ul>
+                            <li><strong>意識：</strong>GCS評估（E+V+M = 3-15分）</li>
+                            <li><strong>呼吸：</strong>次數、深度、血氧飽和度</li>
+                            <li><strong>脈搏：</strong>心率、節律、強度</li>
+                            <li><strong>血壓：</strong>收縮壓/舒張壓</li>
+                            <li><strong>瞳孔：</strong>大小、對光反射、對稱性</li>
+                            <li><strong>體溫：</strong>中心體溫</li>
+                            <li><strong>膚色：</strong>蒼白、發紺、潮紅</li>
+                            <li><strong>血糖：</strong>指尖血糖測定</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="branch-container">
+                        <div class="abnormal">
+                            <strong>異常生命徵象處置：</strong>
+                            <div class="sub-step">
+                                <strong>發燒>38.5°C：</strong>
+                                <div class="treatment">處置：物理降溫 → 補充水分 → 尋找感染源</div>
+                            </div>
+                            
+                            <div class="sub-step">
+                                <strong>低體溫<35°C：</strong>
+                                <div class="treatment">處置：保溫毛毯 → 移除濕冷衣物 → 溫輸液</div>
+                            </div>
+                            
+                            <div class="sub-step">
+                                <strong>瞳孔異常：</strong>
+                                <div class="treatment">處置：神經學檢查 → 血糖測定 → 藥物中毒篩檢</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="arrow"><span>↓</span></div>
+                
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">5</div>
+                        專科處置與後送決策
+                    </div>
+                    <div class="treatment">
+                        <strong>症狀導向處置：</strong>
+                    </div>
+                    
+                    <div class="branch-container">
+                        <div class="sub-step">
+                            <strong>💓 心血管急症：</strong>
+                            <div class="treatment">
+                                <ul>
+                                    <li>NTG舌下含片（胸痛）</li>
+                                    <li>阿斯匹靈（疑似ACS）</li>
+                                    <li>氧氣治療（SpO2<94%）</li>
+                                    <li>心電圖監測</li>
+                                    <li>後送心導管醫院</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="sub-step">
+                            <strong>🫁 呼吸系統急症：</strong>
+                            <div class="treatment">
+                                <ul>
+                                    <li>支氣管擴張劑MDI/DPI</li>
+                                    <li>氧氣治療調節</li>
+                                    <li>體位調整（坐姿/半坐臥）</li>
+                                    <li>呼吸訓練指導</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="sub-step">
+                            <strong>🧠 神經系統急症：</strong>
+                            <div class="treatment">
+                                <ul>
+                                    <li>血糖校正</li>
+                                    <li>側躺復甦姿勢</li>
+                                    <li>避免約束（癲癇發作時）</li>
+                                    <li>記錄神經學變化</li>
+                                    <li>後送神經科醫院</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="sub-step">
+                            <strong>⚡ 過敏/中毒急症：</strong>
+                            <div class="treatment">
+                                <ul>
+                                    <li>腎上腺素自動注射筆</li>
+                                    <li>大量輸液稀釋</li>
+                                    <li>活性炭吸附（口服中毒）</li>
+                                    <li>解毒劑給予（特定中毒）</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="critical">
+                        <strong>🚨 緊急後送指標：</strong>
+                        <ul>
+                            <li>生命徵象不穩定</li>
+                            <li>意識持續惡化</li>
+                            <li>藥物治療無效</li>
+                            <li>需要進階生命支持</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">6</div>
+                        運送途中照護
+                    </div>
+                    <div class="treatment">
+                        <strong>持續監測與處置：</strong>
+                        <ul>
+                            <li>每5分鐘測量生命徵象</li>
+                            <li>藥物效果評估</li>
+                            <li>症狀變化記錄</li>
+                            <li>院前病情通報</li>
+                            <li>準備到院交班資料</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="assessment">
+                        <strong>交班重點：</strong>
+                        <ul>
+                            <li>主要症狀與發病時間</li>
+                            <li>已給予的處置與藥物</li>
+                            <li>生命徵象趨勢</li>
+                            <li>過敏史與用藥史</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 图例 -->
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color" style="background: #d1fae5; border-left: 4px solid #059669;"></div>
+                <span>正常狀況</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #fee2e2; border-left: 4px solid #dc2626;"></div>
+                <span>異常需處置</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #fef2f2; border: 2px solid #991b1b;"></div>
+                <span>危急狀況</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #ede9fe; border-left: 4px solid #8b5cf6;"></div>
+                <span>處置方法</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #ecfdf5; border-left: 4px solid #10b981;"></div>
+                <span>可能病症</span>
+            </div>
+        </div>
+        
+        <!-- 氧气治疗快速参考 -->
+        <div style="background: #f0f9ff; border: 2px solid #0ea5e9; border-radius: 15px; padding: 20px; margin-top: 20px;">
+            <h3 style="color: #0369a1; margin-bottom: 15px;">💨 氧氣治療快速參考指南</h3>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px;">
+                <div style="background: white; border-radius: 8px; padding: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <h4 style="color: #0369a1;">🎭 氧氣面罩種類</h4>
+                    <ul>
+                        <li><strong>鼻導管：</strong>1-6 L/min（24-44% O₂）</li>
+                        <li><strong>簡單面罩：</strong>6-10 L/min（40-60% O₂）</li>
+                        <li><strong>非再吸入面罩：</strong>10-15 L/min（60-95% O₂）</li>
+                        <li><strong>氣切面罩：</strong>6-10 L/min</li>
+                    </ul>
+                </div>
+                
+                <div style="background: white; border-radius: 8px; padding: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <h4 style="color: #0369a1;">🎯 血氧目標值</h4>
+                    <ul>
+                        <li><strong>一般患者：</strong>SpO₂ ≥ 94%</li>
+                        <li><strong>COPD患者：</strong>SpO₂ 88-92%</li>
+                        <li><strong>新生兒：</strong>SpO₂ 90-95%</li>
+                        <li><strong>危急患者：</strong>SpO₂ ≥ 95%</li>
+                    </ul>
+                </div>
+                
+                <div style="background: white; border-radius: 8px; padding: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <h4 style="color: #0369a1;">🫁 袋瓣罩使用</h4>
+                    <ul>
+                        <li><strong>EC手勢：</strong>大拇指+食指扣面罩</li>
+                        <li><strong>通氣頻率：</strong>成人10次/分、兒童20-30次/分</li>
+                        <li><strong>通氣量：</strong>看到胸廓起伏即可</li>
+                        <li><strong>氧氣流量：</strong>15 L/min</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 重要时间窗与联系方式 -->
+        <div style="background: #fef3c7; border: 2px solid #f59e0b; border-radius: 15px; padding: 20px; margin-top: 20px;">
+            <h3 style="color: #92400e; margin-bottom: 15px;">⏰ 緊急救護關鍵時間窗與後送決策</h3>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 15px;">
+                <div style="background: white; border-radius: 8px; padding: 15px;">
+                    <h4 style="color: #92400e;">⚡ 黃金救援時間</h4>
+                    <ul>
+                        <li><strong>心跳停止：</strong>4分鐘內CPR開始</li>
+                        <li><strong>腦缺氧：</strong>8分鐘內ALS支持</li>
+                        <li><strong>嚴重外傷：</strong>1小時內到創傷中心</li>
+                        <li><strong>STEMI：</strong>症狀發作90分鐘內PCI</li>
+                        <li><strong>腦中風：</strong>3小時內到院評估</li>
+                    </ul>
+                </div>
+                
+                <div style="background: white; border-radius: 8px; padding: 15px;">
+                    <h4 style="color: #92400e;">🏥 後送醫院決策</h4>
+                    <ul>
+                        <li><strong>重大外傷：</strong>區域創傷中心</li>
+                        <li><strong>STEMI：</strong>24小時心導管醫院</li>
+                        <li><strong>腦中風：</strong>中風急性醫療處置醫院</li>
+                        <li><strong>小兒急重症：</strong>兒童醫學中心</li>
+                        <li><strong>燒燙傷：</strong>燒燙傷中心</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active status from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active status to corresponding tab
+            event.target.classList.add('active');
+        }
+        
+        // Add search functionality
+        function addSearchFunctionality() {
+            const searchBox = document.createElement('input');
+            searchBox.type = 'text';
+            searchBox.placeholder = '搜尋流程步驟或症狀...';
+            searchBox.style.cssText = `
+                width: 300px;
+                padding: 10px;
+                border: 2px solid #8b5cf6;
+                border-radius: 25px;
+                font-size: 14px;
+                margin: 10px;
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: white;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                z-index: 1000;
+            `;
+            
+            searchBox.addEventListener('input', function(e) {
+                const searchTerm = e.target.value.toLowerCase();
+                const steps = document.querySelectorAll('.step, .sub-step, .condition');
+                
+                steps.forEach(step => {
+                    const text = step.textContent.toLowerCase();
+                    if (text.includes(searchTerm) || searchTerm === '') {
+                        step.style.display = 'block';
+                        if (searchTerm !== '') {
+                            step.style.border = '2px solid #f59e0b';
+                            step.style.background = '#fef3c7';
+                        } else {
+                            step.style.border = '';
+                            step.style.background = '';
+                        }
+                    } else {
+                        step.style.display = 'none';
+                    }
+                });
+            });
+            
+            document.body.appendChild(searchBox);
+        }
+        
+        // Add quick navigation functionality
+        function addQuickNavigation() {
+            const quickNav = document.createElement('div');
+            quickNav.style.cssText = `
+                position: fixed;
+                left: 20px;
+                top: 50%;
+                transform: translateY(-50%);
+                background: rgba(139, 92, 246, 0.9);
+                border-radius: 10px;
+                padding: 15px;
+                z-index: 1000;
+                backdrop-filter: blur(10px);
+            `;
+            
+            const navItems = [
+                { emoji: '🩸', text: '創傷', action: () => showTabByName('trauma') },
+                { emoji: '💊', text: '內科', action: () => showTabByName('medical') },
+                { emoji: '👶', text: '小兒', action: () => showTabByName('pediatric') },
+                { emoji: '🚨', text: '特殊', action: () => showTabByName('special') }
+            ];
+            
+            navItems.forEach(item => {
+                const btn = document.createElement('button');
+                btn.innerHTML = `${item.emoji}<br><small>${item.text}</small>`;
+                btn.style.cssText = `
+                    display: block;
+                    width: 60px;
+                    height: 60px;
+                    margin: 5px 0;
+                    background: rgba(255,255,255,0.2);
+                    border: none;
+                    border-radius: 8px;
+                    color: white;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                `;
+                
+                btn.addEventListener('click', item.action);
+                btn.addEventListener('mouseenter', function() {
+                    this.style.background = 'rgba(255,255,255,0.3)';
+                    this.style.transform = 'scale(1.1)';
+                });
+                btn.addEventListener('mouseleave', function() {
+                    this.style.background = 'rgba(255,255,255,0.2)';
+                    this.style.transform = 'scale(1)';
+                });
+                
+                quickNav.appendChild(btn);
+            });
+            
+            document.body.appendChild(quickNav);
+        }
+        
+        function showTabByName(tabName) {
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+            
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            document.getElementById(tabName).classList.add('active');
+            
+            // Find corresponding tab button and add active status
+            const tabButtons = document.querySelectorAll('.tab');
+            const tabNames = ['trauma', 'medical', 'pediatric', 'special'];
+            const index = tabNames.indexOf(tabName);
+            if (index !== -1) {
+                tabButtons[index].classList.add('active');
+            }
+        }
+        
+        // Add print function
+        function addPrintFunction() {
+            const printBtn = document.createElement('button');
+            printBtn.innerHTML = '🖨️ 列印';
+            printBtn.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: linear-gradient(45deg, #667eea, #764ba2);
+                color: white;
+                border: none;
+                border-radius: 50px;
+                padding: 15px 25px;
+                font-weight: bold;
+                cursor: pointer;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+                z-index: 1000;
+                transition: all 0.3s ease;
+            `;
+            
+            printBtn.addEventListener('click', () => window.print());
+            printBtn.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-3px)';
+                this.style.boxShadow = '0 6px 12px rgba(0,0,0,0.3)';
+            });
+            printBtn.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+                this.style.boxShadow = '0 4px 8px rgba(0,0,0,0.2)';
+            });
+            
+            document.body.appendChild(printBtn);
+        }
+        
+        // Add feature tips
+        function showFeatureTooltips() {
+            const tooltip = document.createElement('div');
+            tooltip.innerHTML = `
+                <div style="background: rgba(0,0,0,0.8); color: white; padding: 15px; border-radius: 10px; position: fixed; top: 100px; right: 20px; z-index: 1001; max-width: 250px;">
+                    <h4>💡 功能提示</h4>
+                    <ul style="margin: 10px 0; padding-left: 20px;">
+                        <li>使用右上角搜尋框快速定位</li>
+                        <li>左側導航快速切換分類</li>
+                        <li>右下角列印按鈕</li>
+                        <li>點擊步驟可高亮顯示</li>
+                    </ul>
+                    <button onclick="this.parentElement.parentElement.remove()" style="background: #8b5cf6; color: white; border: none; border-radius: 5px; padding: 5px 10px; margin-top: 10px; cursor: pointer;">知道了</button>
+                </div>
+            `;
+            
+            document.body.appendChild(tooltip);
+            
+            // Auto disappear after 8 seconds
+            setTimeout(() => {
+                if (tooltip.parentElement) {
+                    tooltip.remove();
+                }
+            }, 8000);
+        }
+        
+        // Add mouse hover effects
+        document.addEventListener('DOMContentLoaded', function() {
+            const steps = document.querySelectorAll('.step');
+            steps.forEach(step => {
+                step.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px)';
+                });
+                
+                step.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+                
+                // Add click highlight effect
+                step.addEventListener('click', function() {
+                    // Remove highlight from other steps
+                    steps.forEach(s => s.style.outline = '');
+                    // Highlight current step
+                    this.style.outline = '3px solid #f59e0b';
+                    this.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                });
+            });
+            
+            // Initialize all functions
+            addSearchFunctionality();
+            addQuickNavigation();
+            addPrintFunction();
+            
+            // Delayed feature tips display
+            setTimeout(showFeatureTooltips, 1000);
+        });
+        
+        // Shock index calculator
+        function calculateShockIndex() {
+            const heartRate = parseFloat(document.getElementById('heartRateInput').value);
+            const systolic = parseFloat(document.getElementById('systolicInput').value);
+            const resultDiv = document.getElementById('shockResult');
+            
+            if (!heartRate || !systolic || heartRate <= 0 || systolic <= 0) {
+                resultDiv.style.display = 'block';
+                resultDiv.innerHTML = '<strong style="color: #dc2626;">⚠️ 請輸入有效的心率和收縮壓值</strong>';
+                return;
+            }
+            
+            const shockIndex = (heartRate / systolic).toFixed(2);
+            let interpretation = '';
+            let color = '';
+            let recommendation = '';
+            
+            if (shockIndex < 0.5) {
+                interpretation = '正常';
+                color = '#059669';
+                recommendation = '持續監測生命徵象';
+            } else if (shockIndex < 1.0) {
+                interpretation = '輕度休克';
+                color = '#d97706';
+                recommendation = '建立靜脈通路，準備輸液';
+            } else if (shockIndex < 1.5) {
+                interpretation = '中度休克';
+                color = '#ea580c';
+                recommendation = '積極輸液復甦，監測尿量';
+            } else {
+                interpretation = '重度休克';
+                color = '#dc2626';
+                recommendation = '緊急處置！大量輸液，尋找休克原因';
+            }
+            
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = `
+                <div style="text-align: center; margin-bottom: 15px;">
+                    <h3 style="color: ${color}; margin: 0;">休克指數: ${shockIndex}</h3>
+                    <p style="color: ${color}; font-weight: bold; margin: 5px 0;">${interpretation}</p>
+                </div>
+                <div style="background: white; padding: 10px; border-radius: 5px; border-left: 4px solid ${color};">
+                    <strong>建議處置：</strong><br>
+                    ${recommendation}
+                </div>
+                <div style="margin-top: 10px; font-size: 0.9em; color: #6b7280;">
+                    <strong>計算公式：</strong>休克指數 = 心率(${heartRate}) ÷ 收縮壓(${systolic}) = ${shockIndex}
+                </div>
+            `;
+        }
+        
+        // Cincinnati Stroke Scale calculator
+        function calculateCPSS() {
+            const faceScore = parseInt(document.getElementById('faceTest').value);
+            const armScore = parseInt(document.getElementById('armTest').value);
+            const speechScore = parseInt(document.getElementById('speechTest').value);
+            const resultDiv = document.getElementById('cpssResult');
+            
+            const totalScore = faceScore + armScore + speechScore;
+            let probability = '';
+            let color = '';
+            let recommendation = '';
+            
+            if (totalScore === 0) {
+                probability = '< 7%';
+                color = '#059669';
+                recommendation = '中風機率低，但仍需密切觀察';
+            } else if (totalScore === 1) {
+                probability = '約 72%';
+                color = '#d97706';
+                recommendation = '⚡ 高度疑似中風！立即啟動中風流程';
+            } else if (totalScore === 2) {
+                probability = '約 86%';
+                color = '#ea580c';
+                recommendation = '🚨 極高機率中風！緊急後送中風中心';
+            } else {
+                probability = '約 85%';
+                color = '#dc2626';
+                recommendation = '🆘 三項全異常！立即緊急處置';
+            }
+            
+            const abnormalItems = [];
+            if (faceScore === 1) abnormalItems.push('臉部表情');
+            if (armScore === 1) abnormalItems.push('手臂舉起');
+            if (speechScore === 1) abnormalItems.push('言語能力');
+            
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = `
+                <div style="text-align: center; margin-bottom: 15px;">
+                    <h3 style="color: ${color}; margin: 0;">CPSS評分: ${totalScore}/3</h3>
+                    <p style="color: ${color}; font-weight: bold; margin: 5px 0;">中風機率: ${probability}</p>
+                </div>
+                
+                ${abnormalItems.length > 0 ? `
+                <div style="background: #fef2f2; padding: 10px; border-radius: 5px; margin-bottom: 10px;">
+                    <strong style="color: #dc2626;">異常項目：</strong><br>
+                    ${abnormalItems.join('、')}
+                </div>
+                ` : ''}
+                
+                <div style="background: white; padding: 10px; border-radius: 5px; border-left: 4px solid ${color};">
+                    <strong>建議處置：</strong><br>
+                    ${recommendation}
+                </div>
+                
+                ${totalScore > 0 ? `
+                <div style="background: #fef3c7; padding: 10px; border-radius: 5px; margin-top: 10px;">
+                    <strong>⏰ 立即行動：</strong>
+                    <ul style="margin: 5px 0 0 20px; padding: 0;">
+                        <li>記錄症狀發作時間</li>
+                        <li>血糖測定（排除低血糖）</li>
+                        <li>維持血壓穩定</li>
+                        <li>院前通報中風中心</li>
+                    </ul>
+                </div>
+                ` : ''}
+            `;
+        }
+        
+        // Add keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+                const tabs = ['trauma', 'medical', 'pediatric', 'special', 'equipment', 'calculator'];
+                const activeTab = document.querySelector('.tab-content.active').id;
+                const currentIndex = tabs.indexOf(activeTab);
+                
+                let newIndex;
+                if (e.key === 'ArrowLeft') {
+                    newIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+                } else {
+                    newIndex = (currentIndex + 1) % tabs.length;
+                }
+                
+                showTabByName(tabs[newIndex]);
+            }
+        });
+    </script>
+</body>
+</html>

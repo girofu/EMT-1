@@ -1,0 +1,35 @@
+{
+  "name": "emt-1-flowcharts",
+  "version": "1.0.0",
+  "description": "EMT-1 緊急醫療救護流程圖系統",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "build": "echo 'No build step required for static HTML'",
+    "test": "echo 'No tests specified'"
+  },
+  "keywords": [
+    "emt",
+    "emergency",
+    "medical",
+    "flowchart",
+    "rescue",
+    "taiwan"
+  ],
+  "author": "EMT-1 Training System",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "compression": "^1.7.4",
+    "helmet": "^7.1.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/your-repo/emt-1-flowcharts.git"
+  },
+  "homepage": "https://your-app.railway.app"
+}
