@@ -326,7 +326,7 @@
                 <div class="step">
                     <div class="step-title">
                         <div class="step-number">1</div>
-                        袋瓣罩甦醒球操作
+                        甦醒球操作
                     </div>
                     
                     <div class="branch-container">
@@ -1271,7 +1271,7 @@
                             <div class="critical">
                                 <strong>特殊處置：</strong>
                                 <ul>
-                                    <li>心率<100次/分：袋瓣罩通氣40-60次/分，30秒</li>
+                                    <li>心率<100次/分：甦醒球通氣40-60次/分，30秒</li>
                                     <li>心率<60次/分：開始CPR</li>
                                     <li>每30週期或60秒檢查脈搏</li>
                                 </ul>
@@ -1931,12 +1931,12 @@
         </div>
         
         <div class="tabs">
-            <button class="tab active" onclick="showTab('trauma')">🩸 外科（創傷）流程</button>
-            <button class="tab" onclick="showTab('medical')">💊 非外科（內科）流程</button>
-            <button class="tab" onclick="showTab('pediatric')">👶 小兒救護流程</button>
-            <button class="tab" onclick="showTab('special')">🚨 特殊情況處置</button>
-            <button class="tab" onclick="showTab('equipment')">🔧 設備操作指南</button>
-            <button class="tab" onclick="showTab('calculator')">🧮 劑量計算器</button>
+            <button class="tab active" onclick="showTab('trauma', this)">🩸 外科（創傷）流程</button>
+            <button class="tab" onclick="showTab('medical', this)">💊 非外科（內科）流程</button>
+            <button class="tab" onclick="showTab('pediatric', this)">👶 小兒救護流程</button>
+            <button class="tab" onclick="showTab('special', this)">🚨 特殊情況處置</button>
+            <button class="tab" onclick="showTab('equipment', this)">🔧 設備操作指南</button>
+            <button class="tab" onclick="showTab('calculator', this)">🧮 劑量計算器</button>
         </div>
         
         <!-- 创伤流程 -->
@@ -2010,7 +2010,57 @@
                 </div>
                 
                 <div class="arrow"><span>↓</span></div>
-                
+
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">1.5</div>
+                        頸椎減移評估與固定
+                    </div>
+                    <div class="assessment">
+                        <strong>頸椎損傷風險評估：</strong>
+                        <ul>
+                            <li>高能量創傷（車禍、墜落、跳水）</li>
+                            <li>頭部外傷伴意識改變</li>
+                            <li>頸部疼痛或壓痛</li>
+                            <li>神經學症狀（感覺異常、運動無力）</li>
+                        </ul>
+                    </div>
+
+                    <div class="branch-container">
+                        <div class="critical">
+                            <strong>🚨 需要頸椎減移：</strong>
+                            <div class="treatment">
+                                <strong>頸椎減移技術：</strong>
+                                <ol>
+                                    <li>雙手固定頭部兩側（拇指在前額，餘指在後枕部）</li>
+                                    <li>保持頭部在中線位置</li>
+                                    <li>避免頭部旋轉或屈伸</li>
+                                    <li>第二人協助維持身體軸線</li>
+                                    <li>使用頸圈或頭部固定器</li>
+                                </ol>
+                            </div>
+                            <div class="assessment">
+                                <strong>持續監測：</strong>
+                                <ul>
+                                    <li>神經學變化（感覺、運動、反射）</li>
+                                    <li>呼吸道通暢度</li>
+                                    <li>固定裝置是否鬆脫</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="normal">
+                            <strong>✅ 不需要頸椎減移：</strong>
+                            <div class="treatment">
+                                <strong>處置：</strong> 繼續創傷評估流程
+                            </div>
+                            <div class="condition">適用於：無高風險因素的患者</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="arrow"><span>↓</span></div>
+
                 <div class="step">
                     <div class="step-title">
                         <div class="step-number">X</div>
@@ -2048,7 +2098,65 @@
                 </div>
                 
                 <div class="arrow"><span>↓</span></div>
-                
+
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">A-1</div>
+                        意識狀態評估
+                    </div>
+                    <div class="assessment">
+                        <strong>GCS評估（Glasgow Coma Scale）：</strong>
+                        <ul>
+                            <li><strong>眼睛開啟：</strong>自發開啟(4)、聲音開啟(3)、疼痛開啟(2)、不開啟(1)</li>
+                            <li><strong>言語反應：</strong>適當對答(5)、混亂對答(4)、不適當言語(3)、無意義音(2)、無反應(1)</li>
+                            <li><strong>運動反應：</strong>遵從指令(6)、定位疼痛(5)、彎曲退縮(4)、異常屈曲(3)、伸展(2)、無反應(1)</li>
+                        </ul>
+                        <strong>GCS總分 = 眼睛 + 言語 + 運動（3-15分）</strong>
+                    </div>
+
+                    <div class="branch-container">
+                        <div class="critical">
+                            <strong>🚨 意識不清（GCS ≤ 8）：</strong>
+                            <div class="emergency">立即處置！</div>
+                            <div class="treatment">
+                                <strong>緊急處置：</strong>
+                                <ul>
+                                    <li>側躺復甦姿勢保護呼吸道</li>
+                                    <li>檢查血糖（排除低血糖）</li>
+                                    <li>準備氣道管理設備</li>
+                                    <li>監測生命徵象</li>
+                                    <li>記錄發作時間和症狀</li>
+                                </ul>
+                            </div>
+                            <div class="condition">可能原因：顱腦外傷、低血糖、中風、藥物中毒、癲癇</div>
+                        </div>
+
+                        <div class="abnormal">
+                            <strong>❌ 意識改變（GCS 9-13）：</strong>
+                            <div class="treatment">
+                                <strong>處置：</strong>
+                                <ul>
+                                    <li>密切監測意識變化</li>
+                                    <li>評估神經學功能</li>
+                                    <li>檢查生命徵象</li>
+                                    <li>準備進階檢查</li>
+                                </ul>
+                            </div>
+                            <div class="condition">可能原因：輕度腦外傷、代謝異常、藥物影響</div>
+                        </div>
+
+                        <div class="normal">
+                            <strong>✅ 意識清楚（GCS 14-15）：</strong>
+                            <div class="treatment">
+                                <strong>處置：</strong> 繼續ABCDE評估
+                            </div>
+                            <div class="condition">意識正常，繼續後續評估</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="arrow"><span>↓</span></div>
+
                 <div class="step">
                     <div class="step-title">
                         <div class="step-number">A</div>
@@ -2057,9 +2165,9 @@
                     <div class="assessment">
                         <strong>評估項目：</strong>
                         <ul>
-                            <li>意識狀態（清、聲、痛、否）</li>
                             <li>氣道是否通暢</li>
-                            <li>頸椎減移需求</li>
+                            <li>是否有異物或分泌物阻塞</li>
+                            <li>呼吸道聲音（喘鳴、鼾聲）</li>
                         </ul>
                     </div>
                     
@@ -2112,7 +2220,7 @@
                             <div class="sub-step">
                                 <strong>呼吸停止或嚴重窘迫：</strong>
                                 <div class="treatment">
-                                    <strong>處置：</strong> 立即袋瓣罩人工呼吸 → 給予氧氣 → 準備進階呼吸道
+                                    <strong>處置：</strong> 立即甦醒球人工呼吸 → 給予氧氣 → 準備進階呼吸道
                                 </div>
                                 <div class="condition">可能病症：張力性氣胸、血胸、連枷胸</div>
                             </div>
@@ -2437,7 +2545,7 @@
                                         <li>氧氣治療 6-10L/min</li>
                                         <li>協助MDI支氣管擴張劑</li>
                                         <li>監測血氧飽和度</li>
-                                        <li>準備袋瓣罩輔助通氣</li>
+                                        <li>準備甦醒球輔助通氣</li>
                                     </ul>
                                 </div>
                                 <div class="condition">可能診斷：急性氣喘、急性肺水腫、肺栓塞、COPD急性發作</div>
@@ -2521,7 +2629,65 @@
                 </div>
                 
                 <div class="arrow"><span>↓</span></div>
-                
+
+                <div class="step">
+                    <div class="step-title">
+                        <div class="step-number">A-1</div>
+                        意識狀態評估
+                    </div>
+                    <div class="assessment">
+                        <strong>GCS評估（Glasgow Coma Scale）：</strong>
+                        <ul>
+                            <li><strong>眼睛開啟：</strong>自發開啟(4)、聲音開啟(3)、疼痛開啟(2)、不開啟(1)</li>
+                            <li><strong>言語反應：</strong>適當對答(5)、混亂對答(4)、不適當言語(3)、無意義音(2)、無反應(1)</li>
+                            <li><strong>運動反應：</strong>遵從指令(6)、定位疼痛(5)、彎曲退縮(4)、異常屈曲(3)、伸展(2)、無反應(1)</li>
+                        </ul>
+                        <strong>GCS總分 = 眼睛 + 言語 + 運動（3-15分）</strong>
+                    </div>
+
+                    <div class="branch-container">
+                        <div class="critical">
+                            <strong>🚨 意識不清（GCS ≤ 8）：</strong>
+                            <div class="emergency">立即處置！</div>
+                            <div class="treatment">
+                                <strong>緊急處置：</strong>
+                                <ul>
+                                    <li>側躺復甦姿勢保護呼吸道</li>
+                                    <li>檢查血糖（排除低血糖）</li>
+                                    <li>準備氣道管理設備</li>
+                                    <li>監測生命徵象</li>
+                                    <li>記錄發作時間和症狀</li>
+                                </ul>
+                            </div>
+                            <div class="condition">可能原因：低血糖、中風、藥物中毒、癲癇、代謝異常</div>
+                        </div>
+
+                        <div class="abnormal">
+                            <strong>❌ 意識改變（GCS 9-13）：</strong>
+                            <div class="treatment">
+                                <strong>處置：</strong>
+                                <ul>
+                                    <li>密切監測意識變化</li>
+                                    <li>評估神經學功能</li>
+                                    <li>檢查生命徵象</li>
+                                    <li>準備進階檢查</li>
+                                </ul>
+                            </div>
+                            <div class="condition">可能原因：代謝異常、藥物影響、輕度腦外傷</div>
+                        </div>
+
+                        <div class="normal">
+                            <strong>✅ 意識清楚（GCS 14-15）：</strong>
+                            <div class="treatment">
+                                <strong>處置：</strong> 繼續ABC評估
+                            </div>
+                            <div class="condition">意識正常，繼續後續評估</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="arrow"><span>↓</span></div>
+
                 <div class="step">
                     <div class="step-title">
                         <div class="step-number">A</div>
@@ -2530,9 +2696,9 @@
                     <div class="assessment">
                         <strong>評估項目：</strong>
                         <ul>
-                            <li>意識狀態（GCS評估）</li>
                             <li>氣道阻塞檢查</li>
                             <li>嘔吐風險評估</li>
+                            <li>呼吸道聲音</li>
                         </ul>
                     </div>
                     
@@ -2546,7 +2712,7 @@
                                     <li>立即側躺復甦姿勢</li>
                                     <li>口咽呼吸道置入</li>
                                     <li>準備抽吸設備</li>
-                                    <li>袋瓣罩輔助通氣</li>
+                                    <li>甦醒球輔助通氣</li>
                                 </ul>
                             </div>
                         </div>
@@ -2587,7 +2753,7 @@
                             <div class="treatment">
                                 <strong>處置：</strong>
                                 <ul>
-                                    <li>袋瓣罩正壓通氣10次/分</li>
+                                    <li>甦醒球正壓通氣10次/分</li>
                                     <li>100%氧氣</li>
                                     <li>準備進階呼吸道</li>
                                     <li>監測胸廓起伏</li>
@@ -2895,14 +3061,33 @@
                                     </ul>
                                 </div>
                                 <div class="treatment">
-                                    <strong>處置：</strong>
+                                    <strong>低血糖處置：</strong>
                                     <ul>
-                                        <li>低血糖：口服糖水（意識清楚）或IV葡萄糖</li>
-                                        <li>高血糖：大量輸液稀釋</li>
+                                        <li><strong>意識清楚：</strong>口服糖水(15-30g)或果汁</li>
+                                        <li><strong>意識不清：</strong>IV葡萄糖50%(50ml D50W)或10%(100ml D10W)</li>
+                                        <li><strong>兒童：</strong>0.5-1g/kg IV葡萄糖</li>
+                                        <li><strong>新生兒：</strong>2ml/kg D10W</li>
+                                        <li>重複血糖測定確認改善</li>
                                         <li>監測意識變化</li>
                                     </ul>
+                                    <strong>高血糖處置：</strong>
+                                    <ul>
+                                        <li>大量輸液稀釋（生理食鹽水或林格氏液）</li>
+                                        <li>尋找感染源（尿路感染、肺炎等）</li>
+                                        <li>監測生命徵象變化</li>
+                                        <li>準備急診處理</li>
+                                    </ul>
                                 </div>
-                                <div class="condition">可能病症：糖尿病酮酸中毒、高滲透壓昏迷、胰島素過量</div>
+                                <div class="critical">
+                                    <strong>⚠️ 緊急注意事項：</strong>
+                                    <ul>
+                                        <li>低血糖可引起意識改變、癲癇、昏迷</li>
+                                        <li>高血糖危急可能導致酮酸中毒</li>
+                                        <li>糖尿病患者血糖異常需謹慎</li>
+                                        <li>懷孕婦女需特別注意</li>
+                                    </ul>
+                                </div>
+                                <div class="condition">可能病症：糖尿病酮酸中毒、高滲透壓昏迷、胰島素過量、感染性休克</div>
                             </div>
                             
                             <div class="abnormal">
@@ -3117,7 +3302,7 @@
                 </div>
                 
                 <div style="background: white; border-radius: 8px; padding: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                    <h4 style="color: #0369a1;">🫁 袋瓣罩使用</h4>
+                    <h4 style="color: #0369a1;">🫁 甦醒球使用</h4>
                     <ul>
                         <li><strong>EC手勢：</strong>大拇指+食指扣面罩</li>
                         <li><strong>通氣頻率：</strong>成人10次/分、兒童20-30次/分</li>
@@ -3159,20 +3344,22 @@
     </div>
 
     <script>
-        function showTab(tabName) {
+        function showTab(tabName, clickedTab) {
             // Hide all tab contents
             const contents = document.querySelectorAll('.tab-content');
             contents.forEach(content => content.classList.remove('active'));
-            
+
             // Remove active status from all tabs
             const tabs = document.querySelectorAll('.tab');
             tabs.forEach(tab => tab.classList.remove('active'));
-            
+
             // Show selected tab content
             document.getElementById(tabName).classList.add('active');
-            
-            // Add active status to corresponding tab
-            event.target.classList.add('active');
+
+            // Add active status to clicked tab
+            if (clickedTab) {
+                clickedTab.classList.add('active');
+            }
         }
         
         // Add search functionality
@@ -3276,17 +3463,17 @@
         function showTabByName(tabName) {
             const contents = document.querySelectorAll('.tab-content');
             contents.forEach(content => content.classList.remove('active'));
-            
+
             const tabs = document.querySelectorAll('.tab');
             tabs.forEach(tab => tab.classList.remove('active'));
-            
+
             document.getElementById(tabName).classList.add('active');
-            
+
             // Find corresponding tab button and add active status
             const tabButtons = document.querySelectorAll('.tab');
-            const tabNames = ['trauma', 'medical', 'pediatric', 'special'];
+            const tabNames = ['trauma', 'medical', 'pediatric', 'special', 'equipment', 'calculator'];
             const index = tabNames.indexOf(tabName);
-            if (index !== -1) {
+            if (index !== -1 && tabButtons[index]) {
                 tabButtons[index].classList.add('active');
             }
         }
