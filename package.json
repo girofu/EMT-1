@@ -25,12 +25,12 @@
     "helmet": "^7.1.0"
   },
   "engines": {
-    "node": "18.x || 20.x || 22.x",
-    "npm": ">=8.0.0"
+    "node": "18.x",
+    "npm": "8.x"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/your-repo/emt-1-flowcharts.git"
+    "url": "git+https://github.com/girofu/EMT-1.git"
   },
-  "homepage": "https://your-app.railway.app"
+  "homepage": "https://emt-1-production.up.railway.app"
 }
