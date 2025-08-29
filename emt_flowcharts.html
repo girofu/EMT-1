@@ -3351,6 +3351,14 @@
                 event.stopPropagation();
             }
 
+            // Lock scroll position immediately
+            const currentScrollY = window.scrollY;
+            const currentScrollX = window.scrollX;
+
+            // Disable scroll temporarily
+            document.body.style.overflow = 'hidden';
+            document.documentElement.style.overflow = 'hidden';
+
             // Hide all tab contents
             const contents = document.querySelectorAll('.tab-content');
             contents.forEach(content => content.classList.remove('active'));
@@ -3370,10 +3378,19 @@
                 clickedTab.classList.add('active');
             }
 
-            // Prevent page scroll by maintaining current scroll position
-            const currentScrollY = window.scrollY;
+            // Restore scroll position after DOM changes
             setTimeout(() => {
-                window.scrollTo(0, currentScrollY);
+                // Re-enable scroll
+                document.body.style.overflow = '';
+                document.documentElement.style.overflow = '';
+
+                // Force scroll position restoration multiple times
+                window.scrollTo(currentScrollX, currentScrollY);
+
+                // Additional restoration attempts for robustness
+                setTimeout(() => window.scrollTo(currentScrollX, currentScrollY), 10);
+                setTimeout(() => window.scrollTo(currentScrollX, currentScrollY), 25);
+                setTimeout(() => window.scrollTo(currentScrollX, currentScrollY), 50);
             }, 0);
         }
         
@@ -3476,6 +3493,14 @@
         }
         
                 function showTabByName(tabName) {
+            // Lock scroll position immediately
+            const currentScrollY = window.scrollY;
+            const currentScrollX = window.scrollX;
+
+            // Disable scroll temporarily
+            document.body.style.overflow = 'hidden';
+            document.documentElement.style.overflow = 'hidden';
+
             const contents = document.querySelectorAll('.tab-content');
             contents.forEach(content => content.classList.remove('active'));
 
@@ -3496,10 +3521,19 @@
                 tabButtons[index].classList.add('active');
             }
 
-            // Prevent page scroll by maintaining current scroll position
-            const currentScrollY = window.scrollY;
+            // Restore scroll position after DOM changes
             setTimeout(() => {
-                window.scrollTo(0, currentScrollY);
+                // Re-enable scroll
+                document.body.style.overflow = '';
+                document.documentElement.style.overflow = '';
+
+                // Force scroll position restoration multiple times
+                window.scrollTo(currentScrollX, currentScrollY);
+
+                // Additional restoration attempts for robustness
+                setTimeout(() => window.scrollTo(currentScrollX, currentScrollY), 10);
+                setTimeout(() => window.scrollTo(currentScrollX, currentScrollY), 25);
+                setTimeout(() => window.scrollTo(currentScrollX, currentScrollY), 50);
             }, 0);
         }
         
